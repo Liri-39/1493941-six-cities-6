@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов» [![Build status][travis-image]][travis-url]
 
 * Студент: [Лысенко Ирина](https://up.htmlacademy.ru/react/6/user/1493941).
-* Наставник: `Неизвестно`.
+* Наставник: [Раиль Сахавиев](https://htmlacademy.ru/profile/id1331891).
 
 ---
 
