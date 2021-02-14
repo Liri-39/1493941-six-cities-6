@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {offerPropTypes} from '../prop-types/offer-prop-types';
 import Card from '../card/card';
 
-const Main = ({offers}) => {
+const MainScreen = ({offers}) => {
   return <React.Fragment>
     <div className="page page--gray page--main">
       <header className="header">
@@ -103,8 +103,8 @@ const Main = ({offers}) => {
   </React.Fragment>;
 };
 
-Main.propTypes = {
+MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired
 };
 
-export default Main;
+export default MainScreen;
