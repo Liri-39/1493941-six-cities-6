@@ -1,15 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {adaptToClient} from './utils.js';
 import App from './components/app/app';
+import {OFFERS} from "./mocks/offers";
 
-fetch(`https://6.react.pages.academy/six-cities/hotels`)
-  .then((response) => response.json())
-  .then((response) => {
-    ReactDOM.render(
-        <App
-          offers = {response.map((offer) => adaptToClient(offer))}
-        />,
-        document.querySelector(`#root`)
-    );
-  });
+
+ReactDOM.render(
+    <App offers={OFFERS}/>,
+    document.querySelector(`#root`),
+);

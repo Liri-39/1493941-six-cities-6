@@ -26,3 +26,7 @@ export const adaptToClient = (offer) => {
 
   return adaptedOffer;
 };
+
+const ONE_STAR_PERCENT = 20;
+
+export const getRatingPercentage = (rating) => `${rating * ONE_STAR_PERCENT}%`;
