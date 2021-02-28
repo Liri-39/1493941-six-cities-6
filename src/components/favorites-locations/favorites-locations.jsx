@@ -1,27 +1,23 @@
 import React from 'react';
-import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import PropTypes from "prop-types";
-import FavoritesPlacesComponent from "../favorites-places/favorites-places";
+import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import FavoritesPlaces from "../favorites-places/favorites-places";
 
-const FavoritesLocationList = (props) => {
-  const {offers} = props;
-  const {location} = props;
-  return <>
-    <li className="favorites__locations-items">
-      <div className="favorites__locations locations locations--current">
-        <div className="locations__item">
-          <a className="locations__item-link" href="#">
-            <span>{location}</span>
-          </a>
-        </div>
+const FavoritesLocationList = ({offers, location}) => {
+  return <li className="favorites__locations-items">
+    <div className="favorites__locations locations locations--current">
+      <div className="locations__item">
+        <a className="locations__item-link" href="#">
+          <span>{location}</span>
+        </a>
       </div>
-      <div className="favorites__places">
-        {
-          offers.map((offer) => <FavoritesPlacesComponent offer = {offer} key={offer[`id`]} />)
-        }
-      </div>
-    </li>
-  </>;
+    </div>
+    <div className="favorites__places">
+      {
+        offers.map((offer) => <FavoritesPlaces offer={offer} key={offer[`id`]}/>)
+      }
+    </div>
+  </li>;
 };
 
 export default FavoritesLocationList;

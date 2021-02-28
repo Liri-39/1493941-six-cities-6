@@ -1,21 +1,34 @@
-import Card from "../card/card";
 import React, {useState} from "react";
 import PropTypes from "prop-types";
+import Card from "../card/card";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 
 const OffersList = ({offers}) => {
-  const [, setCardId] = useState(null);
-  const getCardId = (id) => {
-    setCardId(id);
+  const [cardId, setCardId] = useState({
+    cardId: null,
+  });
+
+  const handlerOfferCardHover = (e) => {
+    e.preventDefault();
+    let target = e.target.closest(`[data-offer-id]`);
+    if (!target) {
+      return;
+    }
+    if (cardId !== target.dataset.offerId) {
+      setCardId(target.dataset.offerId);
+    }
   };
 
-  return <React.Fragment>
-    <div className="cities__places-list places__list tabs__content">
-      {
-        offers.map((offer) => <Card offer = {offer} onHover={getCardId} key={offer.id} />)
-      }
-    </div>
-  </React.Fragment>;
+  const handlerOfferCardHoverOut = (e) => {
+    e.preventDefault();
+    setCardId(null);
+  };
+
+  return <div className="cities__places-list places__list tabs__content" onMouseOver={handlerOfferCardHover} onMouseOut={handlerOfferCardHoverOut}>
+    {
+      offers.map((offer) => <Card offer = {offer} key={offer.id} />)
+    }
+  </div>;
 };
 
 OffersList.propTypes = {

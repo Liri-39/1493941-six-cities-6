@@ -1,46 +1,45 @@
 import React from 'react';
-import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import PropTypes from "prop-types";
-import HeaderComponent from '../header/header';
-import FooterComponent from "../footer/footer";
-import FavoritesEmptyComponent from "../favorites-empty/favorites-empty";
+import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import Header from '../header/header';
+import Footer from "../footer/footer";
 import FavoritesLocationList from "../favorites-locations/favorites-locations";
-
-const FavoritesComponent = ({offers, location}) => {
-  return <>
-    <section className="favorites">
-      <h1 className="favorites__title">Saved listing</h1>
-      <ul className="favorites__list">
-        { location.map((city) => <FavoritesLocationList offers = {offers.filter((offer) => (offer.city.name === city))} location = {city} key = {city}/>)}
-      </ul>
-    </section>
-  </>;
-};
 
 const FavoritesScreen = ({offers}) => {
   const favoritesOffers = offers.filter((offer) => (offer.isFavorite));
   const favoritesLocation = [...new Set(favoritesOffers.map((offer) => (offer.city.name)))];
-  return <React.Fragment>
-    <div className="page">
-      {<HeaderComponent />}
+  const offersExist = favoritesOffers.length;
+  return <div className="page">
+    {<Header/>}
 
-      <main className="page__main page__main--favorites">
-        <div className="page__favorites-container container">
-          {favoritesOffers.length > 0 ? <FavoritesComponent offers = {favoritesOffers} location={favoritesLocation} /> : <FavoritesEmptyComponent />}
-        </div>
-      </main>
+    <main className="page__main page__main--favorites">
+      <div className="page__favorites-container container">
+        {
+          offersExist && <section className="favorites">
+            <h1 className="favorites__title">Saved listing</h1>
+            <ul className="favorites__list">
+              {favoritesLocation.map((city) => <FavoritesLocationList
+                offers={favoritesOffers.filter((offer) => (offer.city.name === city))} location={city} key={city}/>)}
+            </ul>
+          </section>
+        }
+        {
+          !offersExist && <section className="favorites favorites--empty">
+            <h1 className="visually-hidden">Favorites (empty)</h1>
+            <div className="favorites__status-wrapper">
+              <b className="favorites__status">Nothing yet saved.</b>
+              <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+            </div>
+          </section>
+        }
+      </div>
+    </main>
 
-      {<FooterComponent />}
-    </div>
-  </React.Fragment>;
+    {<Footer/>}
+  </div>;
 };
 
 export default FavoritesScreen;
-
-FavoritesComponent.propTypes = {
-  offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-  location: PropTypes.array
-};
 
 FavoritesScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,

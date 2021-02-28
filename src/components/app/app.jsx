@@ -22,8 +22,7 @@ const App = (props) => {
           <FavoritesScreen offers={offers} />
         </Route>
         <Route path="/offer/:id" exact render={(routeProps) => {
-          const offerId = Number(routeProps.match.params.id);
-          return <OfferScreen offer={offers.find((item) => item.id === offerId)}/>;
+          return <OfferScreen offer={offers.find((item) => item.id === Number(routeProps.match.params.id))}/>;
         }}/>
         <Route>
           <NotFoundScreen />
