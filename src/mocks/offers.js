@@ -53,8 +53,8 @@ export const offers = [
     },
     description: `I rent out a very sunny and bright apartment only 7 minutes walking distance to the metro station. The apartment has a spacious living room with a kitchen, one bedroom and a bathroom with mit bath. A terrace can be used in summer.`,
     location: {
-      latitude: 52.36854,
-      longitude: 4.887976,
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
       zoom: 16,
     },
     id: 1,
@@ -112,8 +112,8 @@ export const offers = [
     },
     description: `Discover daily local life in city center, friendly neighborhood, clandestine casino, karaoke, old-style artisans, art gallery and artist studio downstairs.`,
     location: {
-      latitude: 48.84761,
-      longitude: 2.356499,
+      latitude: 52.369553943508,
+      longitude: 4.85309666406198,
       zoom: 16,
     },
     id: 8,
@@ -171,8 +171,8 @@ export const offers = [
     },
     description: `Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country. In our beautiful screened Pondhouse, you can gaze at the stars and listen to the sounds of nature from your cozy warm bed.`,
     location: {
-      latitude: 51.214402,
-      longitude: 6.764314000000001,
+      latitude: 52.3909553943508,
+      longitude: 4.929309666406198,
       zoom: 16,
     },
     id: 22,
@@ -229,8 +229,8 @@ export const offers = [
     },
     description: `I am happy to welcome you to my apartment in the city center! Three words: location, cosy and chic!`,
     location: {
-      latitude: 50.852557,
-      longitude: 4.3376969999999995,
+      latitude: 52.3809553943508,
+      longitude: 4.939309666406198,
       zoom: 16,
     },
     id: 42,

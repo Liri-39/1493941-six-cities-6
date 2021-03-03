@@ -4,15 +4,17 @@ import {offerPropTypes} from '../../prop-types/offer-prop-types';
 import OffersList from '../offers-list/offers-list';
 import Header from "../header/header";
 import LocationsList from "../locations-list/locations-list";
+import Map from '../map/map';
+import {mapPropTypes} from "../../prop-types/map-prop-types";
 
-const MainScreen = ({offers}) => {
+const MainScreen = ({offers, city}) => {
   return <div className="page page--gray page--main">
-    {<Header/>}
+    <Header/>
 
     <main className="page__main page__main--index">
       <h1 className="visually-hidden">Cities</h1>
 
-      {<LocationsList/>}
+      <LocationsList/>
 
       <div className="cities">
         <div className="cities__places-container container">
@@ -37,7 +39,18 @@ const MainScreen = ({offers}) => {
             <OffersList offers={offers}/>
           </section>
           <div className="cities__right-section">
-            <section className="cities__map map"/>
+            <section className="cities__map map">
+              <Map
+                city={city}
+                points={
+                  offers.map((item) =>
+                    Object.assign({}, {
+                      title: item.title,
+                      location: item.location,
+                    }))
+                }
+              />
+            </section>
           </div>
         </div>
       </div>
@@ -47,6 +60,9 @@ const MainScreen = ({offers}) => {
 
 MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
+  city: PropTypes.array,
 };
+
+Map.propTypes = mapPropTypes;
 
 export default MainScreen;
