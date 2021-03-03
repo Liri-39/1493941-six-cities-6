@@ -4,9 +4,7 @@ import Card from "../card/card";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 
 const OffersList = ({offers}) => {
-  const [cardId, setCardId] = useState({
-    cardId: null,
-  });
+  const [cardId, setCardId] = useState(null);
 
   const handlerOfferCardHover = (e) => {
     e.preventDefault();

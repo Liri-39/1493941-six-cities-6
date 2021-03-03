@@ -36,8 +36,8 @@ const FavoritesPlaces = ({offer}) => {
   </article>;
 };
 
-export default FavoritesPlaces;
-
 FavoritesPlaces.propTypes = {
   offer: offerPropTypes,
 };
+
+export default FavoritesPlaces;
