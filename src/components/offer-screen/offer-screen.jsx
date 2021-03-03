@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import Header from "../header/header";
 import NearPlaces from "../near-places/near-places";
-import ReviewsForm from "../reviews-form/reviews-form";
+import ReviewsList from "../reviews-list/reviews-list";
+import Map from "../map/map";
+import {comments} from "../../mocks/comments";
+import {nearby} from "../../mocks/nearby";
 import {getRatingPercentage} from '../../utils';
 
 const GalleryImage = ({image}) => {
@@ -21,7 +24,6 @@ const OfferProperty = ({good}) => {
 const OfferScreen = ({offer}) => {
   return <div className="page">
     {<Header/>}
-
     <main className="page__main page__main--property">
       <section className="property">
         <div className="property__gallery-container container">
@@ -83,50 +85,28 @@ const OfferScreen = ({offer}) => {
               </div>
               <div className="property__description">
                 <p className="property__text">
-                  A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The
-                  building is green and from 18th century.
-                </p>
-                <p className="property__text">
-                  An independent House, strategically located between Rembrand Square and National Opera, but where
-                  the
-                  bustle of the city comes to rest in this alley flowery and colorful.
+                  {offer.description}
                 </p>
               </div>
             </div>
-            <section className="property__reviews reviews">
-              <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
-              <ul className="reviews__list">
-                <li className="reviews__item">
-                  <div className="reviews__user user">
-                    <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                      <img className="reviews__avatar user__avatar" src="img/avatar-max.jpg" width="54" height="54" alt="Reviews avatar"/>
-                    </div>
-                    <span className="reviews__user-name">Max</span>
-                  </div>
-                  <div className="reviews__info">
-                    <div className="reviews__rating rating">
-                      <div className="reviews__stars rating__stars">
-                        <span style={{width: `80%`}}/>
-                        <span className="visually-hidden">Rating</span>
-                      </div>
-                    </div>
-                    <p className="reviews__text">
-                      A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
-                      The
-                      building is green and from 18th century.
-                    </p>
-                    <time className="reviews__time" dateTime="2019-04-24">April 2019</time>
-                  </div>
-                </li>
-              </ul>
-              {<ReviewsForm/>}
-            </section>
+            <ReviewsList comments={comments}/>
           </div>
         </div>
-        <section className="property__map map"/>
+        <section className="property__map map">
+          <Map
+            city={Array.from(Object.values(offer.city.location))}
+            points={
+              nearby.map((item) =>
+                Object.assign({}, {
+                  title: item.title,
+                  location: item.location,
+                }))
+            }
+          />
+        </section>
       </section>
       <div className="container">
-        <NearPlaces/>
+        <NearPlaces nearby={nearby}/>
       </div>
     </main>
   </div>;
@@ -142,6 +122,10 @@ OfferProperty.propTypes = {
 
 OfferScreen.propTypes = {
   offer: offerPropTypes,
+};
+
+ReviewsList.propTypes = {
+  comments: PropTypes.array
 };
 
 export default OfferScreen;
