@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import FavoritesPlaces from "../favorites-places/favorites-places";
 
-const FavoritesLocationList = ({offers, location}) => {
+const FavoritesLocation = ({offers, location}) => {
   return <li className="favorites__locations-items">
     <div className="favorites__locations locations locations--current">
       <div className="locations__item">
@@ -20,9 +20,9 @@ const FavoritesLocationList = ({offers, location}) => {
   </li>;
 };
 
-export default FavoritesLocationList;
+export default FavoritesLocation;
 
-FavoritesLocationList.propTypes = {
+FavoritesLocation.propTypes = {
   location: PropTypes.string.isRequired,
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
 };

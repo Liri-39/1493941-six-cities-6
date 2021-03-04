@@ -24,7 +24,7 @@ export const comments = [
     date: `2021-01-28T14:20:34.607Z`,
   },
   {
-    id: 1,
+    id: 3,
     user: {
       id: 15,
       isPro: false,
@@ -36,7 +36,7 @@ export const comments = [
     date: `2021-02-12T14:20:34.607Z`,
   },
   {
-    id: 2,
+    id: 4,
     user: {
       id: 18,
       isPro: true,

@@ -8,21 +8,20 @@ import FavoritesScreen from "../favorites-screen/favorites-screen";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import OfferScreen from "../offer-screen/offer-screen";
 
-const App = (props) => {
-  const {offers} = props;
+const App = ({offers, city, comments}) => {
 
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <MainScreen offers={offers}/>
+          <MainScreen offers={offers} city={city}/>
         </Route>
         <Route path="/login" exact component={LoginScreen} />
         <Route exact path="/favorites">
           <FavoritesScreen offers={offers} />
         </Route>
         <Route path="/offer/:id" exact render={(routeProps) => {
-          return <OfferScreen offer={offers.find((item) => item.id === Number(routeProps.match.params.id))}/>;
+          return <OfferScreen offer={offers.find((item) => item.id === Number(routeProps.match.params.id))} comments={comments}/>;
         }}/>
         <Route>
           <NotFoundScreen />
@@ -33,7 +32,9 @@ const App = (props) => {
 };
 
 App.propTypes = {
-  offers: PropTypes.arrayOf(offerPropTypes).isRequired
+  offers: PropTypes.arrayOf(offerPropTypes).isRequired,
+  city: PropTypes.array,
+  comments: PropTypes.array
 };
 
 export default App;

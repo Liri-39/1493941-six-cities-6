@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import Header from '../header/header';
 import Footer from "../footer/footer";
-import FavoritesLocationList from "../favorites-locations/favorites-locations";
+import FavoritesLocation from "../favorites-locations/favorites-locations";
 
 const FavoritesScreen = ({offers}) => {
   const favoritesOffers = offers.filter((offer) => (offer.isFavorite));
@@ -18,7 +18,7 @@ const FavoritesScreen = ({offers}) => {
           offersExist && <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              {favoritesLocation.map((city) => <FavoritesLocationList
+              {favoritesLocation.map((city) => <FavoritesLocation
                 offers={favoritesOffers.filter((offer) => (offer.city.name === city))} location={city} key={city}/>)}
             </ul>
           </section>
@@ -35,7 +35,7 @@ const FavoritesScreen = ({offers}) => {
       </div>
     </main>
 
-    {<Footer/>}
+    <Footer/>
   </div>;
 };
 
