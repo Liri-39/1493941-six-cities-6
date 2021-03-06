@@ -43,7 +43,7 @@ const Map = ({city, points}) => {
   }, []);
 
   return (
-    <div id="map" style={{height: `700px`}} ref={mapRef}/>
+    <div id="map" style={{height: `579px`}} ref={mapRef}/>
   );
 };
 
