@@ -7,7 +7,7 @@ import LocationsList from "../locations-list/locations-list";
 import Map from '../map/map';
 import {mapPropTypes} from "../../prop-types/map-prop-types";
 
-const MainScreen = ({offers, city}) => {
+const MainScreen = ({offers, center}) => {
   return <div className="page page--gray page--main">
     <Header/>
 
@@ -41,7 +41,7 @@ const MainScreen = ({offers, city}) => {
           <div className="cities__right-section">
             <section className="cities__map map">
               <Map
-                city={city}
+                center={center}
                 points={
                   offers.map((item) =>
                     Object.assign({}, {
@@ -60,7 +60,7 @@ const MainScreen = ({offers, city}) => {
 
 MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-  city: PropTypes.array,
+  center: PropTypes.arrayOf(PropTypes.number),
 };
 
 Map.propTypes = mapPropTypes;

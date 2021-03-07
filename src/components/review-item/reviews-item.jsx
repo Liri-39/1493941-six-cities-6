@@ -2,8 +2,7 @@ import React from 'react';
 import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
 import {getRatingPercentage} from "../../utils";
 
-const ReviewsItem = ({comment}) => {
-  const review = comment;
+const ReviewsItem = ({review}) => {
   return <li className="reviews__item">
     <div className="reviews__user user">
       <div className="reviews__avatar-wrapper user__avatar-wrapper">
@@ -27,6 +26,6 @@ const ReviewsItem = ({comment}) => {
 };
 
 ReviewsItem.propTypes = {
-  comment: reviewsPropTypes
+  review: reviewsPropTypes
 };
 export default ReviewsItem;

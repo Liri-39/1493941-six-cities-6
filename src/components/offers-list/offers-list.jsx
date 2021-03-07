@@ -6,25 +6,24 @@ import {offerPropTypes} from "../../prop-types/offer-prop-types";
 const OffersList = ({offers}) => {
   const [cardId, setCardId] = useState(null);
 
-  const handlerOfferCardHover = (e) => {
-    e.preventDefault();
-    let target = e.target.closest(`[data-offer-id]`);
-    if (!target) {
-      return;
-    }
-    if (cardId !== target.dataset.offerId) {
-      setCardId(target.dataset.offerId);
+  const handleMouseOver = (newCardId) => {
+    if (cardId !== newCardId) {
+      setCardId(newCardId);
     }
   };
 
-  const handlerOfferCardHoverOut = (e) => {
-    e.preventDefault();
+  const handleMouseOut = () => {
     setCardId(null);
   };
 
-  return <div className="cities__places-list places__list tabs__content" onMouseOver={handlerOfferCardHover} onMouseOut={handlerOfferCardHoverOut}>
+  return <div className="cities__places-list places__list tabs__content">
     {
-      offers.map((offer) => <Card offer = {offer} key={offer.id} />)
+      offers.map((offer) => <Card
+        offer = {offer}
+        key={offer.id}
+        onCardMouseOver={handleMouseOver}
+        onCardMouseOut={handleMouseOut}
+      />)
     }
   </div>;
 };

@@ -9,18 +9,6 @@ import {comments} from "../../mocks/comments";
 import {nearby} from "../../mocks/nearby";
 import {getRatingPercentage} from '../../utils';
 
-const GalleryImage = ({image}) => {
-  return <div className="property__image-wrapper">
-    <img className="property__image" src={image} alt="Photo studio"/>
-  </div>;
-};
-
-const OfferProperty = ({good}) => {
-  return <li className="property__inside-item">
-    {good}
-  </li>;
-};
-
 const OfferScreen = ({offer}) => {
   return <div className="page">
     {<Header/>}
@@ -28,7 +16,10 @@ const OfferScreen = ({offer}) => {
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
-            {offer.images.map((image, i) => (<GalleryImage image={image} key={`${offer.id}-${i}-photo`}/>))}
+            {offer.images.slice(0, 6).map((image, i) => (
+              <div className="property__image-wrapper" key={`${offer.id}-${i}-photo`}>
+                <img className="property__image" src={image} alt="Photo studio"/>
+              </div>))}
           </div>
         </div>
         <div className="property__container container">
@@ -72,7 +63,10 @@ const OfferScreen = ({offer}) => {
             <div className="property__inside">
               <h2 className="property__inside-title">What&apos;s inside</h2>
               <ul className="property__inside-list">
-                {offer.goods.map((good, i) => (<OfferProperty good={good} key={`${offer.id}-${i}-good`}/>))}
+                {offer.goods.map((good, i) => (
+                  <li className="property__inside-item" key={`${offer.id}-${i}-good`}>
+                    {good}
+                  </li>))}
               </ul>
             </div>
             <div className="property__host">
@@ -94,7 +88,7 @@ const OfferScreen = ({offer}) => {
         </div>
         <section className="property__map map">
           <Map
-            city={Array.from(Object.values(offer.city.location))}
+            center={Array.from(Object.values(offer.city.location))}
             points={
               nearby.map((item) =>
                 Object.assign({}, {
@@ -110,14 +104,6 @@ const OfferScreen = ({offer}) => {
       </div>
     </main>
   </div>;
-};
-
-GalleryImage.propTypes = {
-  image: PropTypes.string,
-};
-
-OfferProperty.propTypes = {
-  good: PropTypes.string,
 };
 
 OfferScreen.propTypes = {

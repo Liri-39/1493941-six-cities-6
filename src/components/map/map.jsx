@@ -4,7 +4,7 @@ import {mapPropTypes} from "../../prop-types/map-prop-types";
 
 import "../../../node_modules/leaflet/dist/leaflet.css";
 
-const Map = ({city, points}) => {
+const Map = ({center, points}) => {
   const mapRef = useRef();
 
   const icon = leaflet.icon({
@@ -15,7 +15,7 @@ const Map = ({city, points}) => {
 
   useEffect(() => {
     mapRef.current = leaflet.map(`map`, {
-      center: city,
+      center,
       zoom,
       zoomControl: false,
       marker: true,
@@ -40,7 +40,7 @@ const Map = ({city, points}) => {
         mapRef.current.remove();
       };
     });
-  }, []);
+  }, [center, icon, points]);
 
   return (
     <div id="map" style={{height: `579px`}} ref={mapRef}/>

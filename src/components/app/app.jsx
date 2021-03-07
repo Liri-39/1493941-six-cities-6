@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Switch, Route, BrowserRouter} from 'react-router-dom';
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
 import MainScreen from '../main-screen/main-screen';
 import LoginScreen from "../login-screen/login-screen";
 import FavoritesScreen from "../favorites-screen/favorites-screen";
@@ -14,7 +15,7 @@ const App = ({offers, city, comments}) => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <MainScreen offers={offers} city={city}/>
+          <MainScreen offers={offers} center={city}/>
         </Route>
         <Route path="/login" exact component={LoginScreen} />
         <Route exact path="/favorites">
@@ -33,8 +34,8 @@ const App = ({offers, city, comments}) => {
 
 App.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-  city: PropTypes.array,
-  comments: PropTypes.array
+  city: PropTypes.arrayOf(PropTypes.number),
+  comments: PropTypes.arrayOf(reviewsPropTypes)
 };
 
 export default App;

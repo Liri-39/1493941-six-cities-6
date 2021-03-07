@@ -1,10 +1,19 @@
-import React from "react";
+import React, {useCallback} from "react";
+import PropTypes from "prop-types";
 import {Link} from 'react-router-dom';
 import {offerPropTypes} from '../../prop-types/offer-prop-types';
 import {getRatingPercentage} from '../../utils';
 
-const Card = ({offer}) => {
-  return <article className="cities__place-card place-card" data-offer-id={offer.id}>
+const Card = ({offer, onCardMouseOver, onCardMouseOut}) => {
+  const cardMouseOver = useCallback(() => {
+    onCardMouseOver(offer.id);
+  }, [offer.id, onCardMouseOver]);
+
+  const cardMouseOut = useCallback(()=>{
+    onCardMouseOut();
+  }, [onCardMouseOut]);
+
+  return <article className="cities__place-card place-card" data-offer-id={offer.id} onMouseOver={cardMouseOver} onMouseOut={cardMouseOut}>
     {offer.isPremium &&
     <div className="place-card__mark">
       <span>Premium</span>
@@ -44,6 +53,8 @@ const Card = ({offer}) => {
 
 Card.propTypes = {
   offer: offerPropTypes,
+  onCardMouseOver: PropTypes.func,
+  onCardMouseOut: PropTypes.func
 };
 
 export default Card;
