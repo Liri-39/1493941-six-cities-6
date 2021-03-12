@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import Header from "../header/header";
 import NearPlaces from "../near-places/near-places";
@@ -89,7 +90,7 @@ const OfferScreen = ({offer}) => {
         <section className="property__map map">
           <Map
             center={Array.from(Object.values(offer.city.location))}
-            points={
+            offers={
               nearby.map((item) =>
                 Object.assign({}, {
                   title: item.title,
@@ -114,4 +115,12 @@ ReviewsList.propTypes = {
   comments: PropTypes.array
 };
 
-export default OfferScreen;
+NearPlaces.propTypes = {
+  nearby: PropTypes.array
+};
+
+const mapStateToProps = ({offers}, {match}) => ({
+  offer: offers.find((item) => item.id.toString() === match.params.id)
+});
+
+export default connect(mapStateToProps, null)(OfferScreen);

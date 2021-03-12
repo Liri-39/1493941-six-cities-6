@@ -1,26 +1,27 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import {offerPropTypes} from '../../prop-types/offer-prop-types';
 import OffersList from '../offers-list/offers-list';
 import Header from "../header/header";
 import LocationsList from "../locations-list/locations-list";
+import EmptyOffersList from "../empty-offers-list/empty-offers-list";
 import Map from '../map/map';
 import {mapPropTypes} from "../../prop-types/map-prop-types";
 
-const MainScreen = ({offers, center}) => {
+const MainScreen = ({offers, location}) => {
+  const offersCount = offers.length;
   return <div className="page page--gray page--main">
     <Header/>
-
-    <main className="page__main page__main--index">
+    <main className={`page__main page__main--index ${offersCount === 0 ? `page__main--index-empty` : ``}`}>
       <h1 className="visually-hidden">Cities</h1>
-
       <LocationsList/>
-
-      <div className="cities">
+      {Boolean(!offersCount) && <EmptyOffersList />}
+      {Boolean(offersCount) && <div className="cities">
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{offers.length} places to stay in Amsterdam</b>
+            <b className="places__found">{offersCount} place{Boolean(offersCount) && `s`} to stay in {location.name}</b>
             <form className="places__sorting" action="#" method="get">
               <span className="places__sorting-caption">Sort by</span>
               <span className="places__sorting-type" tabIndex="0">
@@ -36,12 +37,12 @@ const MainScreen = ({offers, center}) => {
                 <li className="places__option" tabIndex="0">Top rated first</li>
               </ul>
             </form>
-            <OffersList offers={offers}/>
+            <OffersList />
           </section>
           <div className="cities__right-section">
             <section className="cities__map map">
               <Map
-                center={center}
+                center={[location.location.latitude, location.location.longitude]}
                 points={
                   offers.map((item) =>
                     Object.assign({}, {
@@ -53,16 +54,22 @@ const MainScreen = ({offers, center}) => {
             </section>
           </div>
         </div>
-      </div>
+      </div>}
     </main>
   </div>;
 };
 
 MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-  center: PropTypes.arrayOf(PropTypes.number),
+  location: PropTypes.object,
+  changeLocation: PropTypes.func
 };
 
 Map.propTypes = mapPropTypes;
 
-export default MainScreen;
+const mapStateToProps = ({offers, location}) => ({
+  offers: offers.filter((item) => item.city.name === location.name),
+  location
+});
+
+export default connect(mapStateToProps, null)(MainScreen);

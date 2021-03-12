@@ -1,11 +1,15 @@
 import React, {useEffect, useRef} from 'react';
+import {connect} from 'react-redux';
 import leaflet from 'leaflet';
 import {mapPropTypes} from "../../prop-types/map-prop-types";
 
 import "../../../node_modules/leaflet/dist/leaflet.css";
 
-const Map = ({center, points}) => {
+const Map = ({offers, location}) => {
   const mapRef = useRef();
+  if (mapRef.current !== undefined) {
+    mapRef.current.remove();
+  }
 
   const icon = leaflet.icon({
     iconUrl: `img/pin.svg`,
@@ -15,7 +19,7 @@ const Map = ({center, points}) => {
 
   useEffect(() => {
     mapRef.current = leaflet.map(`map`, {
-      center,
+      center: [location.location.latitude, location.location.longitude],
       zoom,
       zoomControl: false,
       marker: true,
@@ -27,26 +31,31 @@ const Map = ({center, points}) => {
       })
       .addTo(mapRef.current);
 
-    points.forEach((point) => {
+    offers.forEach((item) => {
       leaflet
         .marker({
-          lat: point.location.latitude,
-          lng: point.location.longitude,
+          lat: item.location.latitude,
+          lng: item.location.longitude,
         }, {icon})
         .addTo(mapRef.current)
-        .bindPopup(point.title);
+        .bindPopup(item.title);
 
       return () => {
         mapRef.current.remove();
       };
     });
-  }, [center, icon, points]);
+  });
 
   return (
-    <div id="map" style={{height: `579px`}} ref={mapRef}/>
+    <div id="map" style={{height: `100%`, width: `100%`}} ref={mapRef}/>
   );
 };
 
 Map.propTypes = mapPropTypes;
 
-export default Map;
+const mapStateToProps = ({offers, location}) => ({
+  offers: offers.filter((item) => item.city.name === location.name),
+  location
+});
+
+export default connect(mapStateToProps, null)(Map);

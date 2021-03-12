@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import {connect} from 'react-redux';
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import Header from '../header/header';
 import Footer from "../footer/footer";
@@ -39,8 +40,12 @@ const FavoritesScreen = ({offers}) => {
   </div>;
 };
 
-export default FavoritesScreen;
+const mapStateToProps = ({offers}) => ({
+  offers: offers.filter((item) => item.isFavorite)
+});
 
 FavoritesScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
 };
+
+export default connect(mapStateToProps, null)(FavoritesScreen);

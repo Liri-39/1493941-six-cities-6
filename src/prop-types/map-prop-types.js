@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 
 export const mapPropTypes = {
-  center: PropTypes.arrayOf(PropTypes.number),
-  points: PropTypes.arrayOf(PropTypes.shape({
+  location: PropTypes.object,
+  offers: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     location: PropTypes.shape({
       latitude: PropTypes.number.isRequired,
