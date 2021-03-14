@@ -7,7 +7,6 @@ import Header from "../header/header";
 import LocationsList from "../locations-list/locations-list";
 import EmptyOffersList from "../empty-offers-list/empty-offers-list";
 import Map from '../map/map';
-import {mapPropTypes} from "../../prop-types/map-prop-types";
 
 const MainScreen = ({offers, location}) => {
   const offersCount = offers.length;
@@ -41,16 +40,7 @@ const MainScreen = ({offers, location}) => {
           </section>
           <div className="cities__right-section">
             <section className="cities__map map">
-              <Map
-                center={[location.location.latitude, location.location.longitude]}
-                points={
-                  offers.map((item) =>
-                    Object.assign({}, {
-                      title: item.title,
-                      location: item.location,
-                    }))
-                }
-              />
+              <Map />
             </section>
           </div>
         </div>
@@ -64,8 +54,6 @@ MainScreen.propTypes = {
   location: PropTypes.object,
   changeLocation: PropTypes.func
 };
-
-Map.propTypes = mapPropTypes;
 
 const mapStateToProps = ({offers, location}) => ({
   offers: offers.filter((item) => item.city.name === location.name),

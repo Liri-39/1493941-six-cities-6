@@ -52,7 +52,7 @@ const Card = ({offer, onCardMouseOver, onCardMouseOut}) => {
 };
 
 Card.propTypes = {
-  offer: offerPropTypes,
+  offer: offerPropTypes.isRequired,
   onCardMouseOver: PropTypes.func,
   onCardMouseOut: PropTypes.func
 };

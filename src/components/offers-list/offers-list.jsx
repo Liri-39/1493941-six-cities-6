@@ -1,29 +1,26 @@
-import React, {useState} from "react";
+import React from "react";
 import {ActionCreator} from "../../store/action";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import Card from "../card/card";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import {cityLocationPropTypes} from "../../prop-types/city-location-prop-types";
 
-const OffersList = ({offers, changeActiveCard}) => {
-  const [cardId, setCardId] = useState(null);
-
+const OffersList = ({offers, activeCard, changeActiveCard}) => {
   const handleMouseOver = (newCardId) => {
-    if (cardId !== newCardId) {
-      setCardId(newCardId);
+    if (activeCard !== newCardId) {
       changeActiveCard(newCardId);
     }
   };
 
   const handleMouseOut = () => {
-    setCardId(null);
     changeActiveCard(null);
   };
 
   return <div className="cities__places-list places__list tabs__content">
     {
       offers.map((offer) => <Card
-        offer = {offer}
+        offer={offer}
         key={offer.id}
         onCardMouseOver={handleMouseOver}
         onCardMouseOut={handleMouseOut}
@@ -34,14 +31,16 @@ const OffersList = ({offers, changeActiveCard}) => {
 
 OffersList.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-  location: PropTypes.object,
+  location: cityLocationPropTypes,
+  activeCard: PropTypes.number,
   changeActiveCard: PropTypes.func
 };
 
-const mapStateToProps = ({offers, location, changeActiveCard}) => ({
+const mapStateToProps = ({offers, location, activeCard, changeActiveCard}) => ({
   offers: offers.filter((item) => item.city.name === location.name),
   location,
-  changeActiveCard
+  activeCard,
+  changeActiveCard,
 });
 
 const mapDispatchToProps = (dispatch) => ({

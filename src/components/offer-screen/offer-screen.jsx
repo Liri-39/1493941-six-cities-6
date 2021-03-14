@@ -7,7 +7,6 @@ import NearPlaces from "../near-places/near-places";
 import ReviewsList from "../reviews-list/reviews-list";
 import Map from "../map/map";
 import {comments} from "../../mocks/comments";
-import {nearby} from "../../mocks/nearby";
 import {getRatingPercentage} from '../../utils';
 
 const OfferScreen = ({offer}) => {
@@ -88,20 +87,11 @@ const OfferScreen = ({offer}) => {
           </div>
         </div>
         <section className="property__map map">
-          <Map
-            center={Array.from(Object.values(offer.city.location))}
-            offers={
-              nearby.map((item) =>
-                Object.assign({}, {
-                  title: item.title,
-                  location: item.location,
-                }))
-            }
-          />
+          <Map />
         </section>
       </section>
       <div className="container">
-        <NearPlaces nearby={nearby}/>
+        <NearPlaces />
       </div>
     </main>
   </div>;
@@ -113,10 +103,6 @@ OfferScreen.propTypes = {
 
 ReviewsList.propTypes = {
   comments: PropTypes.array
-};
-
-NearPlaces.propTypes = {
-  nearby: PropTypes.array
 };
 
 const mapStateToProps = ({offers}, {match}) => ({

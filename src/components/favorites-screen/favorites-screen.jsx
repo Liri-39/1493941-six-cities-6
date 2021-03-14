@@ -7,9 +7,8 @@ import Footer from "../footer/footer";
 import FavoritesLocation from "../favorites-locations/favorites-locations";
 
 const FavoritesScreen = ({offers}) => {
-  const favoritesOffers = offers.filter((offer) => (offer.isFavorite));
-  const favoritesLocation = [...new Set(favoritesOffers.map((offer) => (offer.city.name)))];
-  const offersExist = favoritesOffers.length;
+  const favoritesLocation = [...new Set(offers.map((offer) => (offer.city.name)))];
+  const offersExist = offers.length;
   return <div className="page">
     {<Header/>}
 
@@ -20,7 +19,7 @@ const FavoritesScreen = ({offers}) => {
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
               {favoritesLocation.map((city) => <FavoritesLocation
-                offers={favoritesOffers.filter((offer) => (offer.city.name === city))} location={city} key={city}/>)}
+                offers={offers.filter((offer) => (offer.city.name === city))} location={city} key={city}/>)}
             </ul>
           </section>
         }

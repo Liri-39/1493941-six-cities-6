@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
+import {cityLocationPropTypes} from './city-location-prop-types';
 
 export const mapPropTypes = {
-  location: PropTypes.object,
+  location: cityLocationPropTypes,
+  offer: PropTypes.object,
   offers: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     location: PropTypes.shape({
@@ -9,5 +11,6 @@ export const mapPropTypes = {
       longitude: PropTypes.number.isRequired,
       zoom: PropTypes.number.isRequired,
     }).isRequired,
-  }))
+  })),
+  activeCard: PropTypes.number,
 };
