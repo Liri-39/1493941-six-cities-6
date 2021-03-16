@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import Card from "../card/card";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import {cityLocationPropTypes} from "../../prop-types/city-location-prop-types";
+import {getSortOffers} from "../../utils";
 
 const OffersList = ({offers, activeCard, changeActiveCard}) => {
   const handleMouseOver = (newCardId) => {
@@ -36,11 +37,12 @@ OffersList.propTypes = {
   changeActiveCard: PropTypes.func
 };
 
-const mapStateToProps = ({offers, location, activeCard, changeActiveCard}) => ({
-  offers: offers.filter((item) => item.city.name === location.name),
+const mapStateToProps = ({offers, location, activeCard, changeActiveCard, activeSortType}) => ({
+  offers: getSortOffers(activeSortType, offers, location),
   location,
   activeCard,
   changeActiveCard,
+  activeSortType,
 });
 
 const mapDispatchToProps = (dispatch) => ({

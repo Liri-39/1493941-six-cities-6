@@ -7,9 +7,17 @@ import Header from "../header/header";
 import LocationsList from "../locations-list/locations-list";
 import EmptyOffersList from "../empty-offers-list/empty-offers-list";
 import Map from '../map/map';
+import Sorter from "../sorter/sorter";
+import {ActionCreator} from "../../store/action";
+import {getSortOffers} from "../../utils";
 
-const MainScreen = ({offers, location}) => {
+const MainScreen = ({offers, location, activeSortType, changeSortType}) => {
   const offersCount = offers.length;
+  const handleClick = (newActiveSortType) => {
+    if (activeSortType !== newActiveSortType) {
+      changeSortType(newActiveSortType);
+    }
+  };
   return <div className="page page--gray page--main">
     <Header/>
     <main className={`page__main page__main--index ${offersCount === 0 ? `page__main--index-empty` : ``}`}>
@@ -21,21 +29,7 @@ const MainScreen = ({offers, location}) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offersCount} place{Boolean(offersCount) && `s`} to stay in {location.name}</b>
-            <form className="places__sorting" action="#" method="get">
-              <span className="places__sorting-caption">Sort by</span>
-              <span className="places__sorting-type" tabIndex="0">
-                  Popular
-                <svg className="places__sorting-arrow" width="7" height="4">
-                  <use xlinkHref="#icon-arrow-select"/>
-                </svg>
-              </span>
-              <ul className="places__options places__options--custom places__options--opened">
-                <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                <li className="places__option" tabIndex="0">Price: low to high</li>
-                <li className="places__option" tabIndex="0">Price: high to low</li>
-                <li className="places__option" tabIndex="0">Top rated first</li>
-              </ul>
-            </form>
+            <Sorter onSortTypeSelect={handleClick}/>
             <OffersList />
           </section>
           <div className="cities__right-section">
@@ -52,12 +46,22 @@ const MainScreen = ({offers, location}) => {
 MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
   location: PropTypes.object,
-  changeLocation: PropTypes.func
+  activeSortType: PropTypes.any,
+  changeLocation: PropTypes.func,
+  changeSortType: PropTypes.func
 };
 
-const mapStateToProps = ({offers, location}) => ({
-  offers: offers.filter((item) => item.city.name === location.name),
-  location
+const mapStateToProps = ({offers, location, activeSortType, changeSortType}) => ({
+  activeSortType,
+  offers: getSortOffers(activeSortType, offers, location),
+  location,
+  changeSortType
 });
 
-export default connect(mapStateToProps, null)(MainScreen);
+const mapDispatchToProps = (dispatch) => ({
+  changeSortType(sortType) {
+    dispatch(ActionCreator.changeSortType(sortType));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

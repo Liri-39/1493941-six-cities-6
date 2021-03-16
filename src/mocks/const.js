@@ -49,4 +49,9 @@ export const CityList = {
   }
 };
 
-export const city = [52.38333, 4.9];
+export const SortType = {
+  Popular: `Popular`,
+  PriceByAsc: `Price: low to high`,
+  PriceByDesc: `Price: high to low`,
+  ByRate: `Top rated first`
+};
