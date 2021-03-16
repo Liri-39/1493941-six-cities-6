@@ -12,7 +12,6 @@ import {ActionCreator} from "../../store/action";
 import {getSortOffers} from "../../utils";
 
 const MainScreen = ({offers, location, activeSortType, changeSortType}) => {
-  const offersCount = offers.length;
   const handleClick = (newActiveSortType) => {
     if (activeSortType !== newActiveSortType) {
       changeSortType(newActiveSortType);
@@ -20,15 +19,15 @@ const MainScreen = ({offers, location, activeSortType, changeSortType}) => {
   };
   return <div className="page page--gray page--main">
     <Header/>
-    <main className={`page__main page__main--index ${offersCount === 0 ? `page__main--index-empty` : ``}`}>
+    <main className={`page__main page__main--index ${offers.length === 0 ? `page__main--index-empty` : ``}`}>
       <h1 className="visually-hidden">Cities</h1>
       <LocationsList/>
-      {Boolean(!offersCount) && <EmptyOffersList />}
-      {Boolean(offersCount) && <div className="cities">
+      {offers.length === 0 && <EmptyOffersList />}
+      {offers.length > 0 && <div className="cities">
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{offersCount} place{Boolean(offersCount) && `s`} to stay in {location.name}</b>
+            <b className="places__found">{offers.length > 0} place{offers.length > 0 && `s`} to stay in {location.name}</b>
             <Sorter onSortTypeSelect={handleClick}/>
             <OffersList />
           </section>
