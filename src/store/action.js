@@ -1,8 +1,15 @@
+import {adaptToClient} from "../utils";
+
 export const ActionType = {
   CHANGE_LOCATION: `main/changeLocation`,
   CHANGE_ACTIVE_CARD: `main/changeActiveCard`,
   CHANGE_SORT_TYPE: `main/changeSortType`,
-  SET_DEFAULT: `main/setDefault`
+  LOAD_OFFERS: `data/loadOffers`,
+  REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
+  LOAD_COMMENTS: `data/loadComments`,
+  LOAD_NEAR_OFFERS: `data/loadNearOffers`,
+  LOAD_FAVORITES_LIST: `data/loadFavoriteList`,
+  LOAD_OFFER: `data/loadOffer`,
 };
 
 export const ActionCreator = {
@@ -18,7 +25,28 @@ export const ActionCreator = {
     type: ActionType.CHANGE_SORT_TYPE,
     payload: sortType,
   }),
-  setDefault: () => ({
-    type: ActionType.SET_DEFAULT
-  })
+  loadOffers: (offers) => ({
+    type: ActionType.LOAD_OFFERS,
+    payload: offers.map((offer) => adaptToClient(offer)),
+  }),
+  requireAuthorization: (status) => ({
+    type: ActionType.REQUIRED_AUTHORIZATION,
+    payload: status,
+  }),
+  loadComments: () => ({
+    type: ActionType.LOAD_COMMENTS,
+    payload: status,
+  }),
+  loadNearOffers: () => ({
+    type: ActionType.LOAD_NEAR_OFFERS,
+    payload: status,
+  }),
+  loadFavoriteList: () => ({
+    type: ActionType.LOAD_FAVORITES_LIST,
+    payload: status,
+  }),
+  loadOffer: (offer) => ({
+    type: ActionType.LOAD_OFFER,
+    payload: adaptToClient(offer),
+  }),
 };

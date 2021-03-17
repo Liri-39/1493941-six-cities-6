@@ -1,19 +1,17 @@
 import {SortType} from "./mocks/const";
 
 export const adaptToClient = (offer) => {
-  const {avatar_url: avatarUrl, id: idHost, is_pro: isPro, name: nameHost} = offer.host;
-
   const adaptedOffer = Object.assign(
       {},
       offer,
       {
         isFavorite: offer[`is_favorite`],
         isPremium: offer[`is_premium`],
-        offerHost: {
-          avatarUrl,
-          idHost,
-          isPro,
-          nameHost
+        host: {
+          id: offer.host.id,
+          name: offer.host.name,
+          isPro: offer.host[`is_pro`],
+          avatarUrl: offer.host[`avatar_url`]
         },
         maxAdults: offer[`max_adults`],
         previewImage: offer[`preview_image`],
@@ -24,7 +22,8 @@ export const adaptToClient = (offer) => {
   delete adaptedOffer[`is_premium`];
   delete adaptedOffer[`max_adults`];
   delete adaptedOffer[`preview_image`];
-  delete adaptedOffer.host;
+  delete adaptedOffer.host[`is_pro`];
+  delete adaptedOffer.host[`avatar_url`];
 
   return adaptedOffer;
 };

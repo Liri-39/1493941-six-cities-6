@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {offerPropTypes} from '../../prop-types/offer-prop-types';
@@ -10,8 +10,23 @@ import Map from '../map/map';
 import Sorter from "../sorter/sorter";
 import {ActionCreator} from "../../store/action";
 import {getSortOffers} from "../../utils";
+import LoadingScreen from '../loading-screen/loading-screen';
+import {fetchOfferList} from "../../store/api-action";
 
-const MainScreen = ({offers, location, activeSortType, changeSortType}) => {
+const MainScreen = (props) => {
+  const {offers, location, activeSortType, changeSortType, isDataLoaded, onLoadData} = props;
+  useEffect(() => {
+    if (!isDataLoaded) {
+      onLoadData();
+    }
+  }, [isDataLoaded, onLoadData]);
+
+  if (!isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
   const handleClick = (newActiveSortType) => {
     if (activeSortType !== newActiveSortType) {
       changeSortType(newActiveSortType);
@@ -47,20 +62,26 @@ MainScreen.propTypes = {
   location: PropTypes.object,
   activeSortType: PropTypes.any,
   changeLocation: PropTypes.func,
-  changeSortType: PropTypes.func
+  changeSortType: PropTypes.func,
+  isDataLoaded: PropTypes.bool.isRequired,
+  onLoadData: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({offers, location, activeSortType, changeSortType}) => ({
+const mapStateToProps = ({offers, location, activeSortType, changeSortType, isDataLoaded}) => ({
   activeSortType,
   offers: getSortOffers(activeSortType, offers, location),
   location,
-  changeSortType
+  changeSortType,
+  isDataLoaded
 });
 
 const mapDispatchToProps = (dispatch) => ({
   changeSortType(sortType) {
     dispatch(ActionCreator.changeSortType(sortType));
-  }
+  },
+  onLoadData() {
+    dispatch(fetchOfferList());
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
