@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import {connect} from 'react-redux';
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import Header from '../header/header';
 import Footer from "../footer/footer";
 import FavoritesLocation from "../favorites-locations/favorites-locations";
 
 const FavoritesScreen = ({offers}) => {
-  const favoritesOffers = offers.filter((offer) => (offer.isFavorite));
-  const favoritesLocation = [...new Set(favoritesOffers.map((offer) => (offer.city.name)))];
-  const offersExist = favoritesOffers.length;
+  const favoritesLocation = [...new Set(offers.map((offer) => (offer.city.name)))];
+  const offersExist = offers.length;
   return <div className="page">
     {<Header/>}
 
@@ -19,7 +19,7 @@ const FavoritesScreen = ({offers}) => {
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
               {favoritesLocation.map((city) => <FavoritesLocation
-                offers={favoritesOffers.filter((offer) => (offer.city.name === city))} location={city} key={city}/>)}
+                offers={offers.filter((offer) => (offer.city.name === city))} location={city} key={city}/>)}
             </ul>
           </section>
         }
@@ -39,8 +39,12 @@ const FavoritesScreen = ({offers}) => {
   </div>;
 };
 
-export default FavoritesScreen;
+const mapStateToProps = ({offers}) => ({
+  offers: offers.filter((item) => item.isFavorite)
+});
 
 FavoritesScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
 };
+
+export default connect(mapStateToProps, null)(FavoritesScreen);

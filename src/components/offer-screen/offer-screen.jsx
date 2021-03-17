@@ -1,25 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import Header from "../header/header";
 import NearPlaces from "../near-places/near-places";
 import ReviewsList from "../reviews-list/reviews-list";
 import Map from "../map/map";
 import {comments} from "../../mocks/comments";
-import {nearby} from "../../mocks/nearby";
 import {getRatingPercentage} from '../../utils';
-
-const GalleryImage = ({image}) => {
-  return <div className="property__image-wrapper">
-    <img className="property__image" src={image} alt="Photo studio"/>
-  </div>;
-};
-
-const OfferProperty = ({good}) => {
-  return <li className="property__inside-item">
-    {good}
-  </li>;
-};
 
 const OfferScreen = ({offer}) => {
   return <div className="page">
@@ -28,7 +16,10 @@ const OfferScreen = ({offer}) => {
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
-            {offer.images.map((image, i) => (<GalleryImage image={image} key={`${offer.id}-${i}-photo`}/>))}
+            {offer.images.slice(0, 6).map((image, i) => (
+              <div className="property__image-wrapper" key={`${offer.id}-${i}-photo`}>
+                <img className="property__image" src={image} alt="Photo studio"/>
+              </div>))}
           </div>
         </div>
         <div className="property__container container">
@@ -72,7 +63,10 @@ const OfferScreen = ({offer}) => {
             <div className="property__inside">
               <h2 className="property__inside-title">What&apos;s inside</h2>
               <ul className="property__inside-list">
-                {offer.goods.map((good, i) => (<OfferProperty good={good} key={`${offer.id}-${i}-good`}/>))}
+                {offer.goods.map((good, i) => (
+                  <li className="property__inside-item" key={`${offer.id}-${i}-good`}>
+                    {good}
+                  </li>))}
               </ul>
             </div>
             <div className="property__host">
@@ -93,31 +87,14 @@ const OfferScreen = ({offer}) => {
           </div>
         </div>
         <section className="property__map map">
-          <Map
-            city={Array.from(Object.values(offer.city.location))}
-            points={
-              nearby.map((item) =>
-                Object.assign({}, {
-                  title: item.title,
-                  location: item.location,
-                }))
-            }
-          />
+          <Map />
         </section>
       </section>
       <div className="container">
-        <NearPlaces nearby={nearby}/>
+        <NearPlaces />
       </div>
     </main>
   </div>;
-};
-
-GalleryImage.propTypes = {
-  image: PropTypes.string,
-};
-
-OfferProperty.propTypes = {
-  good: PropTypes.string,
 };
 
 OfferScreen.propTypes = {
@@ -128,4 +105,8 @@ ReviewsList.propTypes = {
   comments: PropTypes.array
 };
 
-export default OfferScreen;
+const mapStateToProps = ({offers}, {match}) => ({
+  offer: offers.find((item) => item.id.toString() === match.params.id)
+});
+
+export default connect(mapStateToProps, null)(OfferScreen);

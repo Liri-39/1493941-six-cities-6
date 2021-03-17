@@ -1,68 +1,66 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import {offerPropTypes} from '../../prop-types/offer-prop-types';
 import OffersList from '../offers-list/offers-list';
 import Header from "../header/header";
 import LocationsList from "../locations-list/locations-list";
+import EmptyOffersList from "../empty-offers-list/empty-offers-list";
 import Map from '../map/map';
-import {mapPropTypes} from "../../prop-types/map-prop-types";
+import Sorter from "../sorter/sorter";
+import {ActionCreator} from "../../store/action";
+import {getSortOffers} from "../../utils";
 
-const MainScreen = ({offers, city}) => {
+const MainScreen = ({offers, location, activeSortType, changeSortType}) => {
+  const handleClick = (newActiveSortType) => {
+    if (activeSortType !== newActiveSortType) {
+      changeSortType(newActiveSortType);
+    }
+  };
   return <div className="page page--gray page--main">
     <Header/>
-
-    <main className="page__main page__main--index">
+    <main className={`page__main page__main--index ${offers.length === 0 ? `page__main--index-empty` : ``}`}>
       <h1 className="visually-hidden">Cities</h1>
-
       <LocationsList/>
-
-      <div className="cities">
+      {offers.length === 0 && <EmptyOffersList />}
+      {offers.length > 0 && <div className="cities">
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{offers.length} places to stay in Amsterdam</b>
-            <form className="places__sorting" action="#" method="get">
-              <span className="places__sorting-caption">Sort by</span>
-              <span className="places__sorting-type" tabIndex="0">
-                  Popular
-                <svg className="places__sorting-arrow" width="7" height="4">
-                  <use xlinkHref="#icon-arrow-select"/>
-                </svg>
-              </span>
-              <ul className="places__options places__options--custom places__options--opened">
-                <li className="places__option places__option--active" tabIndex="0">Popular</li>
-                <li className="places__option" tabIndex="0">Price: low to high</li>
-                <li className="places__option" tabIndex="0">Price: high to low</li>
-                <li className="places__option" tabIndex="0">Top rated first</li>
-              </ul>
-            </form>
-            <OffersList offers={offers}/>
+            <b className="places__found">{offers.length > 0} place{offers.length > 0 && `s`} to stay in {location.name}</b>
+            <Sorter onSortTypeSelect={handleClick}/>
+            <OffersList />
           </section>
           <div className="cities__right-section">
             <section className="cities__map map">
-              <Map
-                city={city}
-                points={
-                  offers.map((item) =>
-                    Object.assign({}, {
-                      title: item.title,
-                      location: item.location,
-                    }))
-                }
-              />
+              <Map />
             </section>
           </div>
         </div>
-      </div>
+      </div>}
     </main>
   </div>;
 };
 
 MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-  city: PropTypes.array,
+  location: PropTypes.object,
+  activeSortType: PropTypes.any,
+  changeLocation: PropTypes.func,
+  changeSortType: PropTypes.func
 };
 
-Map.propTypes = mapPropTypes;
+const mapStateToProps = ({offers, location, activeSortType, changeSortType}) => ({
+  activeSortType,
+  offers: getSortOffers(activeSortType, offers, location),
+  location,
+  changeSortType
+});
 
-export default MainScreen;
+const mapDispatchToProps = (dispatch) => ({
+  changeSortType(sortType) {
+    dispatch(ActionCreator.changeSortType(sortType));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
