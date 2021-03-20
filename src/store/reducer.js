@@ -1,14 +1,16 @@
 import {ActionType} from './action';
-import {CityList, SortType} from '../mocks/const';
-import {offers} from "../mocks/offers";
+import {CityList, SortType, AuthorizationStatus} from '../mocks/const';
 
 const initialState = {
   location: CityList.Paris,
-  offers,
+  offers: [],
+  comments: [],
   cityList: CityList,
   activeCard: null,
   activeSortType: SortType.Popular,
   sortType: SortType,
+  authorizationStatus: AuthorizationStatus.NO_AUTH,
+  isDataLoaded: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -28,9 +30,16 @@ const reducer = (state = initialState, action) => {
         ...state,
         activeSortType: action.payload
       };
-    case ActionType.SET_DEFAULT:
+    case ActionType.LOAD_OFFERS:
       return {
-        ...initialState
+        ...state,
+        offers: action.payload,
+        isDataLoaded: true
+      };
+    case ActionType.REQUIRED_AUTHORIZATION:
+      return {
+        ...state,
+        authorizationStatus: action.payload,
       };
   }
 
