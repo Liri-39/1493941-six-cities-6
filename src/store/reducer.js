@@ -10,7 +10,8 @@ const initialState = {
   activeSortType: SortType.Popular,
   sortType: SortType,
   authorizationStatus: AuthorizationStatus.NO_AUTH,
-  isDataLoaded: false
+  isDataLoaded: false,
+  loginName: ``
 };
 
 const reducer = (state = initialState, action) => {
@@ -40,6 +41,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         authorizationStatus: action.payload,
+      };
+    case ActionType.SET_LOGIN:
+      return {
+        ...state,
+        loginName: action.payload
       };
   }
 
