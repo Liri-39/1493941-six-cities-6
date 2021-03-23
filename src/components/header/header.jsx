@@ -1,7 +1,9 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
-const Header = () => {
+const Header = ({loginName}) => {
   return <header className="header">
     <div className="container">
       <div className="header__wrapper">
@@ -16,7 +18,9 @@ const Header = () => {
               <Link className="header__nav-link header__nav-link--profile" to="/favorites">
                 <div className="header__avatar-wrapper user__avatar-wrapper">
                 </div>
-                <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                <span className="header__user-name user__name">
+                  {loginName === `` ? `Log-in` : loginName}
+                </span>
               </Link>
             </li>
           </ul>
@@ -26,4 +30,12 @@ const Header = () => {
   </header>;
 };
 
-export default Header;
+Header.propTypes = {
+  loginName: PropTypes.string,
+};
+
+const mapStateToProps = ({loginName}) => ({
+  loginName,
+});
+
+export default connect(mapStateToProps)(Header);

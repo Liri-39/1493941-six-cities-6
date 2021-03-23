@@ -10,6 +10,7 @@ import {createAPI} from './api/api';
 import {ActionCreator} from './store/action';
 import {checkAuth} from "./store/api-action";
 import {CityList, AuthorizationStatus} from "./mocks/const";
+import {redirect} from "./store/middlewares/redirect";
 
 const api = createAPI(
     () => store.dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH))
@@ -19,7 +20,8 @@ const api = createAPI(
 const store = createStore(
     reducer,
     composeWithDevTools(
-        applyMiddleware(thunk.withExtraArgument(api))
+        applyMiddleware(thunk.withExtraArgument(api)),
+        applyMiddleware(redirect)
     )
 );
 

@@ -8,7 +8,7 @@ import FavoritesLocation from "../favorites-locations/favorites-locations";
 
 const FavoritesScreen = ({offers}) => {
   const favoritesLocation = [...new Set(offers.map((offer) => (offer.city.name)))];
-  const offersExist = offers.length;
+  const offersExist = Boolean(offers.length);
   return <div className="page">
     {<Header/>}
 

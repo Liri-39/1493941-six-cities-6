@@ -10,6 +10,7 @@ export const ActionType = {
   LOAD_NEAR_OFFERS: `data/loadNearOffers`,
   LOAD_FAVORITES_LIST: `data/loadFavoriteList`,
   LOAD_OFFER: `data/loadOffer`,
+  SET_LOGIN: `user/setLogin`,
 };
 
 export const ActionCreator = {
@@ -32,6 +33,10 @@ export const ActionCreator = {
   requireAuthorization: (status) => ({
     type: ActionType.REQUIRED_AUTHORIZATION,
     payload: status,
+  }),
+  setLogin: (loginName) => ({
+    type: ActionType.SET_LOGIN,
+    payload: loginName
   }),
   loadComments: () => ({
     type: ActionType.LOAD_COMMENTS,
