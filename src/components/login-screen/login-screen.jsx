@@ -77,11 +77,10 @@ LoginScreen.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit(authData, loginName) {
+  onSubmit(authData) {
     dispatch(login(authData));
-    dispatch(ActionCreator.setLogin(loginName));
+    dispatch(ActionCreator.setAuthInfo(authData));
   }
 });
 
-export {LoginScreen};
 export default connect(null, mapDispatchToProps)(LoginScreen);

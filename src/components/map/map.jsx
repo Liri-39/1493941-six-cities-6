@@ -2,24 +2,28 @@ import React, {useEffect, useRef, useMemo} from 'react';
 import {connect} from 'react-redux';
 import leaflet from 'leaflet';
 import {mapPropTypes} from "../../prop-types/map-prop-types";
+import {MapType} from '../../const';
 
 import "../../../node_modules/leaflet/dist/leaflet.css";
 
 const ATTRIBUTION = `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`;
 const DEFAULT_ZOOM = 12;
 
-const Map = ({offers, location, activeCard}) => {
+const Map = ({offer, offers, nearPlaces, location, activeCard, mapType}) => {
   const mapRef = useRef();
   const iconsLayer = useRef();
 
+  const activeCity = mapType === MapType.MAIN ? location : offer.city;
+  const activeMarker = mapType === MapType.MAIN ? activeCard : offer.id;
+
   const locationOffers = useMemo(
-      () => offers.filter((item) => item.city.name === location.name),
-      [offers, location]
+      () => mapType === MapType.MAIN ? offers : [...nearPlaces, offer],
+      [offers, mapType, nearPlaces, offer]
   );
 
   useEffect(() => {
     mapRef.current = leaflet.map(`map`, {
-      center: [location.location.latitude, location.location.longitude],
+      center: [activeCity.location.latitude, activeCity.location.longitude],
       zoom: DEFAULT_ZOOM,
       zoomControl: false,
       marker: true,
@@ -34,7 +38,7 @@ const Map = ({offers, location, activeCard}) => {
     return () => {
       mapRef.current.remove();
     };
-  }, [location]);
+  }, [activeCity]);
 
   useEffect(() => {
     if (iconsLayer.current) {
@@ -43,7 +47,7 @@ const Map = ({offers, location, activeCard}) => {
 
     iconsLayer.current = leaflet.layerGroup(locationOffers.map((item) => {
       const icon = leaflet.icon({
-        iconUrl: item.id === activeCard ? `img/pin-active.svg` : `img/pin.svg`,
+        iconUrl: item.id === activeMarker ? `img/pin-active.svg` : `img/pin.svg`,
         iconSize: [30, 30],
       });
 
@@ -52,7 +56,7 @@ const Map = ({offers, location, activeCard}) => {
         .bindPopup(item.title);
     }));
     iconsLayer.current.addTo(mapRef.current);
-  }, [locationOffers, location, activeCard]);
+  }, [locationOffers, location, activeMarker]);
 
   return (
     <div id="map" style={{height: `100%`, width: `100%`}} ref={mapRef}/>
@@ -61,8 +65,10 @@ const Map = ({offers, location, activeCard}) => {
 
 Map.propTypes = mapPropTypes;
 
-const mapStateToProps = ({offers, location, activeCard}) => ({
+const mapStateToProps = ({offer, offers, nearPlaces, location, activeCard}) => ({
+  offer,
   offers: offers.filter((item) => item.city.name === location.name),
+  nearPlaces,
   location,
   activeCard,
 });

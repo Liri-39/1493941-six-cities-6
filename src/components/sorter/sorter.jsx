@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {SortType} from "../../mocks/const";
+import {SortType} from "../../const";
 
 const Sorter = ({activeSortType, onSortTypeSelect}) => {
   return <form className="places__sorting" action="#" method="get">

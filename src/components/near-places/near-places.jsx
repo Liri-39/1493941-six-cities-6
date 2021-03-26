@@ -1,8 +1,8 @@
 import React from 'react';
 import Card from "../card/card";
 import PropTypes from 'prop-types';
-import {connect} from "react-redux";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import {CardType} from "../../const";
 
 const NearPlaces = ({offers}) => {
   return <section className="near-places places">
@@ -11,6 +11,7 @@ const NearPlaces = ({offers}) => {
       {offers.map((item) => <Card
         offer={item}
         key={`near-places-${item.id}`}
+        cardType={CardType.NEARPLACES}
       />)}
     </div>
   </section>;
@@ -20,8 +21,4 @@ NearPlaces.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes)
 };
 
-const mapStateToProps = ({offers}) => ({
-  offers: offers.slice(0, 3)
-});
-
-export default connect(mapStateToProps)(NearPlaces);
+export default NearPlaces;

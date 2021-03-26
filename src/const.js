@@ -60,3 +60,29 @@ export const AuthorizationStatus = {
   AUTH: `AUTH`,
   NO_AUTH: `NO_AUTH`,
 };
+
+export const AppRoute = {
+  MAIN_SCREEN: `/`,
+  LOGIN_SCREEN: `/login`,
+  FAVORITES_SCREEN: `/favorites`,
+  OFFER_SCREEN: `/offer/:id`,
+  NOT_FOUND: `/404`
+};
+
+export const APIRoute = {
+  LOGIN: `/login`,
+  LOGOUT: `/logout`,
+  OFFERS: `/hotels`,
+  COMMENTS: `/comments`,
+  FAVORITES: `/favorite`
+};
+
+export const CardType = {
+  MAIN: `cities__place-card`,
+  NEARPLACES: `near-places__card`
+};
+
+export const MapType = {
+  MAIN: `cities`,
+  PROPERTY: `property`
+};

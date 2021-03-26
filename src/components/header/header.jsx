@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 
-const Header = ({loginName}) => {
+const Header = ({authInfo}) => {
   return <header className="header">
     <div className="container">
       <div className="header__wrapper">
@@ -19,7 +19,7 @@ const Header = ({loginName}) => {
                 <div className="header__avatar-wrapper user__avatar-wrapper">
                 </div>
                 <span className="header__user-name user__name">
-                  {loginName === `` ? `Log-in` : loginName}
+                  {authInfo === null ? `Sign-in` : authInfo.email}
                 </span>
               </Link>
             </li>
@@ -31,11 +31,11 @@ const Header = ({loginName}) => {
 };
 
 Header.propTypes = {
-  loginName: PropTypes.string,
+  authInfo: PropTypes.object
 };
 
-const mapStateToProps = ({loginName}) => ({
-  loginName,
+const mapStateToProps = ({authInfo}) => ({
+  authInfo,
 });
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, null)(Header);

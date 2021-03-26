@@ -12,6 +12,7 @@ import {ActionCreator} from "../../store/action";
 import {getSortOffers} from "../../utils";
 import LoadingScreen from '../loading-screen/loading-screen';
 import {fetchOfferList} from "../../store/api-action";
+import {MapType} from '../../const';
 
 const MainScreen = (props) => {
   const {offers, location, activeSortType, changeSortType, isDataLoaded, onLoadData} = props;
@@ -42,13 +43,13 @@ const MainScreen = (props) => {
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">{offers.length > 0} place{offers.length > 0 && `s`} to stay in {location.name}</b>
+            <b className="places__found">{offers.length} place{offers.length > 0 && `s`} to stay in {location.name}</b>
             <Sorter onSortTypeSelect={handleClick}/>
             <OffersList />
           </section>
           <div className="cities__right-section">
             <section className="cities__map map">
-              <Map />
+              <Map mapType={MapType.MAIN}/>
             </section>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import {adaptToClient} from "../utils";
+import {adaptToClient, adaptCommentsToClient, adaptAuthDataToClient} from "../utils";
 
 export const ActionType = {
   CHANGE_LOCATION: `main/changeLocation`,
@@ -10,7 +10,10 @@ export const ActionType = {
   LOAD_NEAR_OFFERS: `data/loadNearOffers`,
   LOAD_FAVORITES_LIST: `data/loadFavoriteList`,
   LOAD_OFFER: `data/loadOffer`,
-  SET_LOGIN: `user/setLogin`,
+  SET_AUTH_INFO: `user/setAuthInfo`,
+  REDIRECT_TO_ROUTE: `offer/redirectToRoute`,
+  CHANGE_FAVORITE_STATUS: `main/changeFavoriteStatus`,
+  ADD_COMMENT: `addComment`
 };
 
 export const ActionCreator = {
@@ -34,24 +37,36 @@ export const ActionCreator = {
     type: ActionType.REQUIRED_AUTHORIZATION,
     payload: status,
   }),
-  setLogin: (loginName) => ({
-    type: ActionType.SET_LOGIN,
-    payload: loginName
+  setAuthInfo: (info) => ({
+    type: ActionType.SET_AUTH_INFO,
+    payload: adaptAuthDataToClient(info)
   }),
-  loadComments: () => ({
+  loadComments: (comments) => ({
     type: ActionType.LOAD_COMMENTS,
-    payload: status,
+    payload: comments.map((comment) => adaptCommentsToClient(comment)),
   }),
-  loadNearOffers: () => ({
+  loadNearOffers: (offers) => ({
     type: ActionType.LOAD_NEAR_OFFERS,
-    payload: status,
+    payload: offers.map((offer) => adaptToClient(offer)),
   }),
-  loadFavoriteList: () => ({
+  loadFavoriteList: (offers) => ({
     type: ActionType.LOAD_FAVORITES_LIST,
-    payload: status,
+    payload: offers.map((offer) => adaptToClient(offer)),
   }),
   loadOffer: (offer) => ({
     type: ActionType.LOAD_OFFER,
     payload: adaptToClient(offer),
   }),
+  redirectToRoute: (url) => ({
+    type: ActionType.REDIRECT_TO_ROUTE,
+    payload: url,
+  }),
+  changeFavoriteStatus: (offer) => ({
+    type: ActionType.CHANGE_FAVORITE_STATUS,
+    payload: offer,
+  }),
+  addComment: (data) => ({
+    type: ActionType.ADD_COMMENT,
+    payload: data
+  })
 };
