@@ -1,4 +1,4 @@
-import {SortType} from "./const";
+import {sortType} from "./const";
 
 export const adaptToClient = (offer) => {
   const adaptedOffer = Object.assign(
@@ -88,13 +88,13 @@ export const getSortOffers = (activeSortType, offers, location) => {
   const offersDefault = offers.filter((item) => item.city.name === location.name);
   const offersCopy = offersDefault.slice();
   switch (activeSortType) {
-    case SortType.Popular:
+    case sortType.popular:
       return offersCopy;
-    case SortType.PriceByAsc:
+    case sortType.priceByAsc:
       return offersCopy.sort(sortByPriceAsc);
-    case SortType.PriceByDesc:
+    case sortType.priceByDesc:
       return offersCopy.sort(sortByPriceDesc);
-    case SortType.ByRate:
+    case sortType.byRating:
       return offersCopy.sort(sortByRate);
     default:
       return offersDefault;

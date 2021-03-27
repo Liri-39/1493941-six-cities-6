@@ -49,11 +49,11 @@ export const CityList = {
   }
 };
 
-export const SortType = {
-  Popular: `Popular`,
-  PriceByAsc: `Price: low to high`,
-  PriceByDesc: `Price: high to low`,
-  ByRate: `Top rated first`
+export const sortType = {
+  popular: `Popular`,
+  priceByAsc: `Price: low to high`,
+  priceByDesc: `Price: high to low`,
+  byRating: `Top rated first`
 };
 
 export const AuthorizationStatus = {
@@ -86,3 +86,11 @@ export const MapType = {
   MAIN: `cities`,
   PROPERTY: `property`
 };
+
+export const ratings = [
+  {rating: 5, title: `perfect`},
+  {rating: 4, title: `good`},
+  {rating: 3, title: `not bad`},
+  {rating: 2, title: `badly`},
+  {rating: 1, title: `terribly`},
+];

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {SortType} from "../../const";
+import {sortType} from "../../const";
 
 const Sorter = ({activeSortType, onSortTypeSelect}) => {
   return <form className="places__sorting" action="#" method="get">
@@ -13,13 +13,13 @@ const Sorter = ({activeSortType, onSortTypeSelect}) => {
       </svg>
     </span>
     <ul className="places__options places__options--custom places__options--opened">
-      {Object.entries(SortType).map(([key, value]) => (
+      {Object.entries(sortType).map(([key, value]) => (
         <li className={`places__option ${activeSortType === key ? `places__option--active` : ``}`}
           key={key}
           tabIndex="0"
           onClick={(evt) => {
             evt.preventDefault();
-            onSortTypeSelect(SortType[key]);
+            onSortTypeSelect(sortType[key]);
           }}
         > {value}</li>
       ))}

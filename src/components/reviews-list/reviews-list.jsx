@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
-import ReviewsForm from "../reviews-form/reviews-form";
+import ReviewsForm from "../review-form/review-form";
 import ReviewsItem from "../review-item/reviews-item";
 import {AuthorizationStatus} from "../../const";
 

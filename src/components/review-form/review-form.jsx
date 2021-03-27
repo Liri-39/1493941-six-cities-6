@@ -3,17 +3,10 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {sendComment} from "../../store/api-action";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
-import ReviewsRatingItem from "../reviews-rating-item/reviews-rating-item";
+import ReviewRatingItem from "../review-rating-item/review-rating-item";
+import {ratings} from "../../const";
 
-const ReviewsForm = ({offer, onSubmit}) => {
-  const STARS = [
-    {rating: 5, title: `perfect`},
-    {rating: 4, title: `good`},
-    {rating: 3, title: `not bad`},
-    {rating: 2, title: `badly`},
-    {rating: 1, title: `terribly`},
-  ];
-
+const ReviewForm = ({offer, onSubmit}) => {
   const [reviews, setComment] = useState({
     comment: ``,
     rating: 0,
@@ -49,8 +42,8 @@ const ReviewsForm = ({offer, onSubmit}) => {
   return <form className="reviews__form form" action="#" method="post" onSubmit={sendForm}>
     <label className="reviews__label form__label" htmlFor="review">Your review</label>
     <div className="reviews__rating-form form__rating">
-      {STARS.map((item) =>
-        <ReviewsRatingItem
+      {ratings.map((item) =>
+        <ReviewRatingItem
           item={item}
           handleOnChange={handleCommentRatingChange}
           rating={reviews.rating}
@@ -69,7 +62,7 @@ const ReviewsForm = ({offer, onSubmit}) => {
   </form>;
 };
 
-ReviewsForm.propTypes = {
+ReviewForm.propTypes = {
   offer: offerPropTypes,
   onSubmit: PropTypes.func
 };
@@ -85,4 +78,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewsForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ReviewForm);

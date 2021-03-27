@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 
-const ReviewsRatingItem = ({item, handleOnChange, rating}) => {
+const ReviewRatingItem = ({item, handleOnChange, rating}) => {
   return <>
     <input
       className="form__rating-input visually-hidden"
@@ -24,10 +24,10 @@ const ReviewsRatingItem = ({item, handleOnChange, rating}) => {
   </>;
 };
 
-ReviewsRatingItem.propTypes = {
+ReviewRatingItem.propTypes = {
   item: PropTypes.any.isRequired,
   handleOnChange: PropTypes.func.isRequired,
   rating: PropTypes.number.isRequired,
 };
 
-export default ReviewsRatingItem;
+export default ReviewRatingItem;

@@ -1,5 +1,5 @@
 import {ActionType} from './action';
-import {CityList, SortType, AuthorizationStatus} from '../const';
+import {CityList, sortType, AuthorizationStatus} from '../const';
 
 const initialState = {
   location: CityList.Paris,
@@ -10,8 +10,8 @@ const initialState = {
   favorites: [],
   cityList: CityList,
   activeCard: null,
-  activeSortType: SortType.Popular,
-  sortType: SortType,
+  activeSortType: sortType.popular,
+  sortType,
   authorizationStatus: AuthorizationStatus.NO_AUTH,
   isDataLoaded: false,
   isOfferLoaded: false,
