@@ -3,13 +3,20 @@ import {connect} from "react-redux";
 import {sendComment} from "../../store/api-action";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import {createAPI} from "../../api/api";
+import ReviewsRatingItem from "../reviews-rating-item/reviews-rating-item";
 
 const ReviewsForm = ({offer}) => {
-  const STARS = [5, 4, 3, 2, 1];
+  const STARS = [
+    {rating: 5, title: `perfect`},
+    {rating: 4, title: `good`},
+    {rating: 3, title: `not bad`},
+    {rating: 2, title: `badly`},
+    {rating: 1, title: `terribly`},
+  ];
 
   const [reviews, setComment] = useState({
     comment: ``,
-    rating: null,
+    rating: 0,
   });
   const api = createAPI();
   const sendForm = (evt) => {
@@ -19,7 +26,7 @@ const ReviewsForm = ({offer}) => {
         console.log(res.data);
       });
     sendComment(offer.id, {comment: reviews.comment, rating: reviews.rating});
-    setComment({comment: ``, rating: null});
+    setComment({comment: ``, rating: 0});
   };
 
   const handleCommentRatingChange = (evt) => {
@@ -39,31 +46,14 @@ const ReviewsForm = ({offer}) => {
   return <form className="reviews__form form" action="#" method="post" onSubmit={sendForm}>
     <label className="reviews__label form__label" htmlFor="review">Your review</label>
     <div className="reviews__rating-form form__rating">
-      {STARS.map((item) => {
-        return <>
-          <input
-            className="form__rating-input visually-hidden"
-            name="rating"
-            value={item}
-            id={`${item}-stars`}
-            type="radio"
-            onChange={handleCommentRatingChange}
-            checked={item === reviews.rating}
-            key={`${item}-stars-input`}
-          />
-          <label
-            htmlFor={`${item}-stars`}
-            className="reviews__rating-label form__rating-label"
-            title="perfect"
-            key={`${item}-stars-label`}
-          >
-            <svg className="form__star-image" width="37" height="33" key={`${item}-stars-svg`}>
-              <use xlinkHref="#icon-star" key={`${item}-stars`}/>
-            </svg>
-          </label>
-        </>;
-      })
-      }
+      {STARS.map((item) =>
+        <ReviewsRatingItem
+          item={item}
+          handleOnChange={handleCommentRatingChange}
+          rating={reviews.rating}
+          key={`${item.rating}-stars`}
+        />
+      )}
     </div>
     <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" value={reviews.comment} onChange={handleCommentTextChange} required/>
     <div className="reviews__button-wrapper">
