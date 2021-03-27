@@ -1,28 +1,39 @@
-import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from "react-redux";
-import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import React, {useEffect, useState} from 'react';
+import {useParams} from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
 import Header from "../header/header";
 import NearPlaces from "../near-places/near-places";
 import ReviewsList from "../reviews-list/reviews-list";
 import Map from "../map/map";
 import {getRatingPercentage} from '../../utils';
-import {fetchOffer, fetchNearOffers, fetchComments} from "../../store/api-action";
+import {fetchOffer, fetchNearOffers, fetchComments, sendFavoriteStatus} from "../../store/api-action";
 import LoadingScreen from "../loading-screen/loading-screen";
-import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
+import withError from "../../hocs/with-error/with-error";
 import {MapType} from '../../const';
+import {NameSpace} from "../../store/reducer";
 
-const OfferScreen = (props) => {
-  const {id, offer, comments, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded, onLoadData} = props;
+const OfferScreen = () => {
+  const {id} = useParams();
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {
-      onLoadData(id);
-    }
-  }, [id, isOfferLoaded, isCommentsLoaded, onLoadData, isNearPlacesLoaded]);
+    dispatch(fetchOffer(id));
+    dispatch(fetchNearOffers(id));
+    dispatch(fetchComments(id));
+  }, [id, dispatch]);
 
-  if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {
+  const {
+    offer,
+    isNearPlacesLoaded,
+    isOfferLoaded,
+    isCommentsLoaded,
+  } = useSelector((state) => state[NameSpace.OFFER]);
+
+  const [favoriteStatus, setFavoriteStatus] = useState(isOfferLoaded ? offer.isFavorite : false);
+
+  if ((!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) || (isOfferLoaded && Number(offer.id) !== Number(id))) {
     return (
-      <LoadingScreen />
+      <LoadingScreen/>
     );
   }
 
@@ -40,14 +51,23 @@ const OfferScreen = (props) => {
         </div>
         <div className="property__container container">
           <div className="property__wrapper">
+            {offer.isPremium &&
             <div className="property__mark">
-              <span>{offer.isPremium}</span>
+              <span>Premium</span>
             </div>
+            }
             <div className="property__name-wrapper">
               <h1 className="property__name">
                 {offer.title}
               </h1>
-              <button className="property__bookmark-button button" type="button">
+              <button
+                className={`property__bookmark-button button ${favoriteStatus ? `property__bookmark-button--active` : ``}`}
+                type="button"
+                onClick={() => {
+                  dispatch(sendFavoriteStatus(offer.id, !offer.isFavorite));
+                  setFavoriteStatus(!offer.isFavorite);
+                }}
+              >
                 <svg className="property__bookmark-icon" width="31" height="33">
                   <use xlinkHref="#icon-bookmark"/>
                 </svg>
@@ -88,10 +108,16 @@ const OfferScreen = (props) => {
             <div className="property__host">
               <h2 className="property__host-title">Meet the host</h2>
               <div className="property__host-user user">
-                <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
+                <div
+                  className={`property__avatar-wrapper ${offer.host.isPro ? `property__avatar-wrapper--pro` : ``} user__avatar-wrapper`}>
                   <img className="property__avatar user__avatar" src={offer.host.avatarUrl} width="74" height="74" alt="Host avatar"/>
                 </div>
                 <span className="property__user-name">{offer.host.name}</span>
+                {offer.host.isPro &&
+                <span className="property__user-status">
+                    Pro
+                </span>
+                }
               </div>
               <div className="property__description">
                 <p className="property__text">
@@ -99,7 +125,7 @@ const OfferScreen = (props) => {
                 </p>
               </div>
             </div>
-            <ReviewsList comments={comments}/>
+            <ReviewsList/>
           </div>
         </div>
         <section className="property__map map">
@@ -107,44 +133,11 @@ const OfferScreen = (props) => {
         </section>
       </section>
       <div className="container">
-        <NearPlaces offers={nearPlaces}/>
+        <NearPlaces/>
       </div>
     </main>
   </div>;
 };
 
-OfferScreen.propTypes = {
-  id: PropTypes.string,
-  offer: offerPropTypes,
-  comments: PropTypes.arrayOf(reviewsPropTypes),
-  nearPlaces: PropTypes.arrayOf(offerPropTypes),
-  isOfferLoaded: PropTypes.any,
-  isCommentsLoaded: PropTypes.any,
-  isNearPlacesLoaded: PropTypes.any,
-  onLoadData: PropTypes.func,
-  cardType: PropTypes.string
-};
-
-ReviewsList.propTypes = {
-  comments: PropTypes.arrayOf(reviewsPropTypes),
-};
-
-const mapStateToProps = ({offer, comments, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded}, {match}) => ({
-  offer,
-  comments,
-  nearPlaces,
-  isNearPlacesLoaded,
-  isOfferLoaded,
-  isCommentsLoaded,
-  id: match.params.id,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLoadData(id) {
-    dispatch(fetchOffer(id));
-    dispatch(fetchNearOffers(id));
-    dispatch(fetchComments(id));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OfferScreen);
+export {OfferScreen};
+export default withError(OfferScreen);

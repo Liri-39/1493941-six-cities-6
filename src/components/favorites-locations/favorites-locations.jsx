@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from "prop-types";
-import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import FavoritesPlaces from "../favorites-places/favorites-places";
+import {useSelector} from "react-redux";
+import {getFavoritesOffers} from "../../store/data/favorite-data/selectors";
 
-const FavoritesLocation = ({offers, location}) => {
+const FavoritesLocation = ({location}) => {
+  const offers = useSelector(getFavoritesOffers);
+  const offersByLocation = useMemo(() => offers.slice().filter((item) => item.city.name === location), [location, offers]);
+
   return <li className="favorites__locations-items">
     <div className="favorites__locations locations locations--current">
       <div className="locations__item">
@@ -14,15 +18,15 @@ const FavoritesLocation = ({offers, location}) => {
     </div>
     <div className="favorites__places">
       {
-        offers.map((offer) => <FavoritesPlaces offer={offer} key={offer[`id`]}/>)
+        offersByLocation.map((offer) => <FavoritesPlaces offer={offer} key={offer[`id`]}/>)
       }
     </div>
   </li>;
 };
 
+FavoritesLocation.propTypes = {
+  location: PropTypes.string.isRequired
+};
+
 export default FavoritesLocation;
 
-FavoritesLocation.propTypes = {
-  location: PropTypes.string.isRequired,
-  offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-};

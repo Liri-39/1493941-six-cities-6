@@ -1,72 +1,109 @@
+import {createAction} from '@reduxjs/toolkit';
 import {adaptToClient, adaptCommentsToClient, adaptAuthDataToClient} from "../utils";
 
 export const ActionType = {
-  CHANGE_LOCATION: `main/changeLocation`,
-  CHANGE_ACTIVE_CARD: `main/changeActiveCard`,
-  CHANGE_SORT_TYPE: `main/changeSortType`,
+  CHANGE_LOCATION: `data/changeLocation`,
+  CHANGE_ACTIVE_CARD: `data/changeActiveCard`,
+  CHANGE_SORT_TYPE: `data/changeSortType`,
   LOAD_OFFERS: `data/loadOffers`,
   REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
-  LOAD_COMMENTS: `data/loadComments`,
-  LOAD_NEAR_OFFERS: `data/loadNearOffers`,
+  LOAD_COMMENTS: `offer/loadComments`,
+  LOAD_NEAR_OFFERS: `offer/loadNearOffers`,
   LOAD_FAVORITES_LIST: `data/loadFavoriteList`,
-  LOAD_OFFER: `data/loadOffer`,
+  LOAD_OFFER: `offer/loadOffer`,
   SET_AUTH_INFO: `user/setAuthInfo`,
-  REDIRECT_TO_ROUTE: `offer/redirectToRoute`,
-  CHANGE_FAVORITE_STATUS: `main/changeFavoriteStatus`,
-  ADD_COMMENT: `addComment`
+  REDIRECT_TO_ROUTE: `data/redirectToRoute`,
+  ADD_TO_FAVORITE: `data/addToFavorite`,
+  DELETE_FROM_FAVORITE: `data/deleteFromFavorite`,
+  ADD_COMMENT: `offer/addComment`,
+  UPDATE_OFFERS: `data/updateOffers`,
+  SET_IS_ERROR: `data/setIsError`,
+  SET_IS_DISABLE: `offer/setIsDisable`,
+  CHANGE_LOAD_STATUS: `offer/changeLoadStatus`
 };
 
-export const ActionCreator = {
-  changeLocation: (location) => ({
-    type: ActionType.CHANGE_LOCATION,
+export const changeLocation = createAction(ActionType.CHANGE_LOCATION, (location) => {
+  return {
     payload: location,
-  }),
-  changeActiveCard: (id) => ({
-    type: ActionType.CHANGE_ACTIVE_CARD,
+  };
+});
+export const changeActiveCard = createAction(ActionType.CHANGE_ACTIVE_CARD, (id) => {
+  return {
     payload: id,
-  }),
-  changeSortType: (sortType) => ({
-    type: ActionType.CHANGE_SORT_TYPE,
+  };
+});
+export const changeSortType = createAction(ActionType.CHANGE_SORT_TYPE, (sortType) => {
+  return {
     payload: sortType,
-  }),
-  loadOffers: (offers) => ({
-    type: ActionType.LOAD_OFFERS,
+  };
+});
+export const loadOffers = createAction(ActionType.LOAD_OFFERS, (offers) => {
+  return {
     payload: offers.map((offer) => adaptToClient(offer)),
-  }),
-  requireAuthorization: (status) => ({
-    type: ActionType.REQUIRED_AUTHORIZATION,
+  };
+});
+export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => {
+  return {
     payload: status,
-  }),
-  setAuthInfo: (info) => ({
-    type: ActionType.SET_AUTH_INFO,
-    payload: adaptAuthDataToClient(info)
-  }),
-  loadComments: (comments) => ({
-    type: ActionType.LOAD_COMMENTS,
+  };
+});
+export const setAuthInfo = createAction(ActionType.SET_AUTH_INFO, (info) => {
+  return {
+    payload: adaptAuthDataToClient(info),
+  };
+});
+export const loadComments = createAction(ActionType.LOAD_COMMENTS, (comments) => {
+  return {
     payload: comments.map((comment) => adaptCommentsToClient(comment)),
-  }),
-  loadNearOffers: (offers) => ({
-    type: ActionType.LOAD_NEAR_OFFERS,
+  };
+});
+export const loadNearOffers = createAction(ActionType.LOAD_NEAR_OFFERS, (offers) => {
+  return {
     payload: offers.map((offer) => adaptToClient(offer)),
-  }),
-  loadFavoriteList: (offers) => ({
-    type: ActionType.LOAD_FAVORITES_LIST,
+  };
+});
+export const loadFavoriteList = createAction(ActionType.LOAD_FAVORITES_LIST, (offers) => {
+  return {
     payload: offers.map((offer) => adaptToClient(offer)),
-  }),
-  loadOffer: (offer) => ({
-    type: ActionType.LOAD_OFFER,
+  };
+});
+export const loadOffer = createAction(ActionType.LOAD_OFFER, (offer) => {
+  return {
     payload: adaptToClient(offer),
-  }),
-  redirectToRoute: (url) => ({
-    type: ActionType.REDIRECT_TO_ROUTE,
+  };
+});
+export const changeLoadStatus = createAction(ActionType.CHANGE_LOAD_STATUS, (status) => {
+  return {
+    payload: status,
+  };
+});
+export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => {
+  return {
     payload: url,
-  }),
-  changeFavoriteStatus: (offer) => ({
-    type: ActionType.CHANGE_FAVORITE_STATUS,
-    payload: offer,
-  }),
-  addComment: (data) => ({
-    type: ActionType.ADD_COMMENT,
-    payload: data
-  })
-};
+  };
+});
+export const addToFavorite = createAction(ActionType.ADD_TO_FAVORITE, (offer) => {
+  return {
+    payload: adaptToClient(offer),
+  };
+});
+export const deleteFromFavorite = createAction(ActionType.DELETE_FROM_FAVORITE, (offer) => {
+  return {
+    payload: offer.id,
+  };
+});
+export const updateOffers = createAction(ActionType.UPDATE_OFFERS, (offer) => {
+  return {
+    payload: adaptToClient(offer),
+  };
+});
+export const setIsError = createAction(ActionType.SET_IS_ERROR, (isError) => {
+  return {
+    payload: isError,
+  };
+});
+export const setIsDisable = createAction(ActionType.SET_IS_DISABLE, (isDisable) => {
+  return {
+    payload: isDisable,
+  };
+});

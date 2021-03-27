@@ -1,24 +1,25 @@
 import React, {useRef} from 'react';
 import {useHistory} from 'react-router-dom';
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
+import {useDispatch} from "react-redux";
 import {login} from "../../store/api-action";
 import Header from '../header/header';
-import {ActionCreator} from "../../store/action";
+import withError from "../../hocs/with-error/with-error";
 
-const LoginScreen = ({onSubmit}) => {
+const LoginScreen = () => {
   const loginRef = useRef();
   const passwordRef = useRef();
 
   const history = useHistory();
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    onSubmit({
+    dispatch(login({
       login: loginRef.current.value,
       password: passwordRef.current.value,
-    });
+    }));
     history.push(`/`);
   };
 
@@ -72,15 +73,5 @@ const LoginScreen = ({onSubmit}) => {
   </div>;
 };
 
-LoginScreen.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit(authData) {
-    dispatch(login(authData));
-    dispatch(ActionCreator.setAuthInfo(authData));
-  }
-});
-
-export default connect(null, mapDispatchToProps)(LoginScreen);
+export {LoginScreen};
+export default withError(LoginScreen);

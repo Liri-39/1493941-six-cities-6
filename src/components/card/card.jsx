@@ -1,24 +1,19 @@
-import React, {useCallback} from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import {Link} from 'react-router-dom';
+import {Link} from "react-router-dom";
 import {offerPropTypes} from '../../prop-types/offer-prop-types';
 import {getRatingPercentage} from '../../utils';
 import {CardType} from '../../const';
+import {useCardEventsHandler} from '../../hooks/use-card-events-handlers';
 
-const Card = ({cardType, offer, onCardMouseOver, onCardMouseOut}) => {
-  const cardMouseOver = useCallback(() => {
-    onCardMouseOver(offer.id);
-  }, [offer.id, onCardMouseOver]);
-
-  const cardMouseOut = useCallback(() => {
-    onCardMouseOut();
-  }, [onCardMouseOut]);
+const Card = ({cardType, offer}) => {
+  const [favoriteStatus, cardMouseOver, cardMouseOut, handleClickFavorite] = useCardEventsHandler(offer);
 
   return <article
     className={`${cardType} place-card`}
     data-offer-id={offer.id}
-    onMouseOver={cardType === CardType.MAIN ? cardMouseOver : () => {}}
-    onMouseOut={cardType === CardType.MAIN ? cardMouseOut : () => {}}>
+    onMouseEnter={cardType === CardType.MAIN ? cardMouseOver : () => {}}
+    onMouseLeave={cardType === CardType.MAIN ? cardMouseOut : () => {}}>
     {offer.isPremium &&
     <div className="place-card__mark">
       <span>Premium</span>
@@ -35,7 +30,11 @@ const Card = ({cardType, offer, onCardMouseOver, onCardMouseOut}) => {
           <b className="place-card__price-value">&euro;{offer.price}</b>
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
-        <button className={`place-card__bookmark-button button ${offer.isFavorite ? `place-card__bookmark-button--active button` : ``}`} type="button">
+        <button
+          className={`place-card__bookmark-button button ${favoriteStatus ? `place-card__bookmark-button--active` : ``}`}
+          type="button"
+          onClick={() => handleClickFavorite()}
+        >
           <svg className={`place-card__bookmark-icon`} width="18" height="19">
             <use xlinkHref="#icon-bookmark"/>
           </svg>
@@ -58,8 +57,6 @@ const Card = ({cardType, offer, onCardMouseOver, onCardMouseOut}) => {
 
 Card.propTypes = {
   offer: offerPropTypes.isRequired,
-  onCardMouseOver: PropTypes.func,
-  onCardMouseOut: PropTypes.func,
   cardType: PropTypes.string
 };
 
