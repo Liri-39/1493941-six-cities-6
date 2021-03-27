@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
+import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {sendComment} from "../../store/api-action";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
-import {createAPI} from "../../api/api";
 import ReviewsRatingItem from "../reviews-rating-item/reviews-rating-item";
 
-const ReviewsForm = ({offer}) => {
+const ReviewsForm = ({offer, onSubmit}) => {
   const STARS = [
     {rating: 5, title: `perfect`},
     {rating: 4, title: `good`},
@@ -18,14 +18,17 @@ const ReviewsForm = ({offer}) => {
     comment: ``,
     rating: 0,
   });
-  const api = createAPI();
+
   const sendForm = (evt) => {
     evt.preventDefault();
-    api.post(`https://6.react.pages.academy/six-cities/comments/${offer.id}`, {comment: reviews.comment, rating: reviews.rating})
-      .then((res) => {
-        console.log(res.data);
-      });
-    sendComment(offer.id, {comment: reviews.comment, rating: reviews.rating});
+    onSubmit(
+        offer.id,
+        {
+          comment: reviews.comment,
+          rating: reviews.rating,
+        }
+    );
+
     setComment({comment: ``, rating: 0});
   };
 
@@ -68,10 +71,18 @@ const ReviewsForm = ({offer}) => {
 
 ReviewsForm.propTypes = {
   offer: offerPropTypes,
+  onSubmit: PropTypes.func
 };
 
 const mapStateToProps = ({offer}) => ({
   offer,
 });
 
-export default connect(mapStateToProps, null)(ReviewsForm);
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit(id, {comment, rating}) {
+    dispatch(sendComment(id, {comment, rating}));
+  }
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReviewsForm);
