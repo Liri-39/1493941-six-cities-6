@@ -9,7 +9,7 @@ import {reducer} from './store/reducer';
 import {createAPI} from './api/api';
 import {ActionCreator} from './store/action';
 import {checkAuth} from "./store/api-action";
-import {CityList, AuthorizationStatus} from "./mocks/const";
+import {CityList, AuthorizationStatus} from "./const";
 import {redirect} from "./store/middlewares/redirect";
 
 const api = createAPI(

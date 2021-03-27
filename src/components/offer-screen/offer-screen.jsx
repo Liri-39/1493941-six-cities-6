@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
@@ -6,10 +6,26 @@ import Header from "../header/header";
 import NearPlaces from "../near-places/near-places";
 import ReviewsList from "../reviews-list/reviews-list";
 import Map from "../map/map";
-import {comments} from "../../mocks/comments";
 import {getRatingPercentage} from '../../utils';
+import {fetchOffer, fetchNearOffers, fetchComments} from "../../store/api-action";
+import LoadingScreen from "../loading-screen/loading-screen";
+import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
+import {MapType} from '../../const';
 
-const OfferScreen = ({offer}) => {
+const OfferScreen = (props) => {
+  const {id, offer, comments, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded, onLoadData} = props;
+  useEffect(() => {
+    if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {
+      onLoadData(id);
+    }
+  }, [id, isOfferLoaded, isCommentsLoaded, onLoadData, isNearPlacesLoaded]);
+
+  if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
   return <div className="page">
     {<Header/>}
     <main className="page__main page__main--property">
@@ -87,26 +103,48 @@ const OfferScreen = ({offer}) => {
           </div>
         </div>
         <section className="property__map map">
-          <Map />
+          <Map mapType={MapType.PROPERTY}/>
         </section>
       </section>
       <div className="container">
-        <NearPlaces />
+        <NearPlaces offers={nearPlaces}/>
       </div>
     </main>
   </div>;
 };
 
 OfferScreen.propTypes = {
+  id: PropTypes.string,
   offer: offerPropTypes,
+  comments: PropTypes.arrayOf(reviewsPropTypes),
+  nearPlaces: PropTypes.arrayOf(offerPropTypes),
+  isOfferLoaded: PropTypes.any,
+  isCommentsLoaded: PropTypes.any,
+  isNearPlacesLoaded: PropTypes.any,
+  onLoadData: PropTypes.func,
+  cardType: PropTypes.string
 };
 
 ReviewsList.propTypes = {
-  comments: PropTypes.array
+  comments: PropTypes.arrayOf(reviewsPropTypes),
 };
 
-const mapStateToProps = ({offers}, {match}) => ({
-  offer: offers.find((item) => item.id.toString() === match.params.id)
+const mapStateToProps = ({offer, comments, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded}, {match}) => ({
+  offer,
+  comments,
+  nearPlaces,
+  isNearPlacesLoaded,
+  isOfferLoaded,
+  isCommentsLoaded,
+  id: match.params.id,
 });
 
-export default connect(mapStateToProps, null)(OfferScreen);
+const mapDispatchToProps = (dispatch) => ({
+  onLoadData(id) {
+    dispatch(fetchOffer(id));
+    dispatch(fetchNearOffers(id));
+    dispatch(fetchComments(id));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OfferScreen);

@@ -1,17 +1,24 @@
 import {ActionType} from './action';
-import {CityList, SortType, AuthorizationStatus} from '../mocks/const';
+import {CityList, SortType, AuthorizationStatus} from '../const';
 
 const initialState = {
   location: CityList.Paris,
   offers: [],
   comments: [],
+  nearPlaces: [],
+  offer: null,
+  favorites: [],
   cityList: CityList,
   activeCard: null,
   activeSortType: SortType.Popular,
   sortType: SortType,
   authorizationStatus: AuthorizationStatus.NO_AUTH,
   isDataLoaded: false,
-  loginName: ``
+  isOfferLoaded: false,
+  isCommentsLoaded: false,
+  isNearPlacesLoaded: false,
+  isFavoritesLoaded: false,
+  authInfo: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -37,15 +44,51 @@ const reducer = (state = initialState, action) => {
         offers: action.payload,
         isDataLoaded: true
       };
+    case ActionType.LOAD_OFFER:
+      return {
+        ...state,
+        offer: action.payload,
+        isOfferLoaded: true
+      };
+    case ActionType.LOAD_COMMENTS:
+      return {
+        ...state,
+        comments: action.payload,
+        isCommentsLoaded: true
+      };
+    case ActionType.LOAD_NEAR_OFFERS:
+      return {
+        ...state,
+        nearPlaces: action.payload,
+        isNearPlacesLoaded: true
+      };
     case ActionType.REQUIRED_AUTHORIZATION:
       return {
         ...state,
-        authorizationStatus: action.payload,
+        authorizationStatus: action.payload
       };
-    case ActionType.SET_LOGIN:
+    case ActionType.SET_AUTH_INFO:
       return {
         ...state,
-        loginName: action.payload
+        authInfo: action.payload
+      };
+    case ActionType.LOAD_FAVORITES_LIST:
+      return {
+        ...state,
+        favorites: action.payload,
+        isFavoritesLoaded: true
+      };
+    case ActionType.ADD_COMMENT:
+      return {
+        ...state,
+        comments: [...state.comments, action.payload],
+        onLoadCommentFormData: true,
+        commentFormError: ``
+      };
+    case ActionType.CHANGE_FAVORITE_STATUS:
+      return {
+        ...state,
+        favorites: [...state.favorites, action.payload],
       };
   }
 
