@@ -56,14 +56,14 @@ export const logout = () => (dispatch, _getState, api) => (
     .get(APIRoute.LOGOUT)
     .then(() => dispatch(ActionCreator.requireAuthorization(AuthorizationStatus.NO_AUTH)))
 );
-export const sendComment = (id, comment) => (dispatch, _getState, api) => {
+export const sendComment = (id, {comment, rating}) => (dispatch, _getState, api) => {
   api
-    .post(`${APIRoute.COMMENTS}/${id}`, comment)
+    .post(`${APIRoute.COMMENTS}/${id}`, {comment, rating})
     .then(({data}) => dispatch(ActionCreator.loadComments(data)));
 };
 
-export const sendFavoriteStatus = (id, favorite) => (dispatch, _getState, api) => (
+export const sendFavoriteStatus = (id, offer) => (dispatch, _getState, api) => (
   api
-    .post(`${APIRoute.FAVORITES}/${id}/${favorite}`)
+    .post(`${APIRoute.FAVORITES}/${id}/${!offer.isFavorite}`)
     .then(({data}) => dispatch(ActionCreator.changeFavoriteStatus(data)))
 );

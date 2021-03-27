@@ -18,7 +18,7 @@ const LoginScreen = ({onSubmit}) => {
     onSubmit({
       login: loginRef.current.value,
       password: passwordRef.current.value,
-    }, loginRef.current.value);
+    });
     history.push(`/`);
   };
 

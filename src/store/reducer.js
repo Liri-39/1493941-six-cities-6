@@ -81,9 +81,14 @@ const reducer = (state = initialState, action) => {
     case ActionType.ADD_COMMENT:
       return {
         ...state,
-        comments: action.payload,
+        comments: [...state.comments, action.payload],
         onLoadCommentFormData: true,
         commentFormError: ``
+      };
+    case ActionType.CHANGE_FAVORITE_STATUS:
+      return {
+        ...state,
+        favorites: [...state.favorites, action.payload],
       };
   }
 

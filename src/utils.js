@@ -28,6 +28,34 @@ export const adaptToClient = (offer) => {
   return adaptedOffer;
 };
 
+export const adaptToServer = (offer) => {
+  const adaptedOffer = Object.assign(
+      {},
+      offer,
+      {
+        "is_favorite": offer.isFavorite,
+        "is_premium": offer.isPremium,
+        "host": {
+          "id": offer.host.id,
+          "name": offer.host.name,
+          "is_pro": offer.host.isPro,
+          "avatar_url": offer.host.avatarUrl,
+        },
+        "max_adults": offer.maxAdults,
+        "preview_image": offer.previewImage,
+      },
+  );
+
+  delete adaptedOffer[`is_favorite`];
+  delete adaptedOffer[`is_premium`];
+  delete adaptedOffer[`max_adults`];
+  delete adaptedOffer[`preview_image`];
+  delete adaptedOffer.host[`is_pro`];
+  delete adaptedOffer.host[`avatar_url`];
+
+  return adaptedOffer;
+};
+
 export const adaptCommentsToClient = (comment) => {
   const adaptedComment = Object.assign(
       {},

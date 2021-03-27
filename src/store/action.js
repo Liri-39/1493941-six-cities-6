@@ -1,4 +1,4 @@
-import {adaptToClient, adaptCommentsToClient, adaptAuthDataToClient} from "../utils";
+import {adaptToClient, adaptToServer, adaptCommentsToClient, adaptAuthDataToClient} from "../utils";
 
 export const ActionType = {
   CHANGE_LOCATION: `main/changeLocation`,

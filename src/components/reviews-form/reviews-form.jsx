@@ -1,22 +1,25 @@
 import React, {useState} from 'react';
-import {ActionCreator} from "../../store/action";
 import {connect} from "react-redux";
 import {sendComment} from "../../store/api-action";
 import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import {createAPI} from "../../api/api";
 
 const ReviewsForm = ({offer}) => {
+  const STARS = [5, 4, 3, 2, 1];
+
   const [reviews, setComment] = useState({
     comment: ``,
     rating: null,
   });
-
+  const api = createAPI();
   const sendForm = (evt) => {
     evt.preventDefault();
-    sendComment(offer.id, reviews);
-    setComment({
-      comment: ``,
-      rating: null,
-    });
+    api.post(`https://6.react.pages.academy/six-cities/comments/${offer.id}`, {comment: reviews.comment, rating: reviews.rating})
+      .then((res) => {
+        console.log(res.data);
+      });
+    sendComment(offer.id, {comment: reviews.comment, rating: reviews.rating});
+    setComment({comment: ``, rating: null});
   };
 
   const handleCommentRatingChange = (evt) => {
@@ -36,40 +39,31 @@ const ReviewsForm = ({offer}) => {
   return <form className="reviews__form form" action="#" method="post" onSubmit={sendForm}>
     <label className="reviews__label form__label" htmlFor="review">Your review</label>
     <div className="reviews__rating-form form__rating">
-      <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" onChange={handleCommentRatingChange}/>
-      <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
-        <svg className="form__star-image" width="37" height="33">
-          <use xlinkHref="#icon-star"/>
-        </svg>
-      </label>
-
-      <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" onChange={handleCommentRatingChange}/>
-      <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
-        <svg className="form__star-image" width="37" height="33">
-          <use xlinkHref="#icon-star"/>
-        </svg>
-      </label>
-
-      <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" onChange={handleCommentRatingChange}/>
-      <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
-        <svg className="form__star-image" width="37" height="33">
-          <use xlinkHref="#icon-star"/>
-        </svg>
-      </label>
-
-      <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" onChange={handleCommentRatingChange}/>
-      <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
-        <svg className="form__star-image" width="37" height="33">
-          <use xlinkHref="#icon-star"/>
-        </svg>
-      </label>
-
-      <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio" onChange={handleCommentRatingChange}/>
-      <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
-        <svg className="form__star-image" width="37" height="33">
-          <use xlinkHref="#icon-star"/>
-        </svg>
-      </label>
+      {STARS.map((item) => {
+        return <>
+          <input
+            className="form__rating-input visually-hidden"
+            name="rating"
+            value={item}
+            id={`${item}-stars`}
+            type="radio"
+            onChange={handleCommentRatingChange}
+            checked={item === reviews.rating}
+            key={`${item}-stars-input`}
+          />
+          <label
+            htmlFor={`${item}-stars`}
+            className="reviews__rating-label form__rating-label"
+            title="perfect"
+            key={`${item}-stars-label`}
+          >
+            <svg className="form__star-image" width="37" height="33" key={`${item}-stars-svg`}>
+              <use xlinkHref="#icon-star" key={`${item}-stars`}/>
+            </svg>
+          </label>
+        </>;
+      })
+      }
     </div>
     <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" value={reviews.comment} onChange={handleCommentTextChange} required/>
     <div className="reviews__button-wrapper">
@@ -90,10 +84,4 @@ const mapStateToProps = ({offer}) => ({
   offer,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit(id, comment) {
-    dispatch(ActionCreator.sendComment(id, comment));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewsForm);
+export default connect(mapStateToProps, null)(ReviewsForm);
