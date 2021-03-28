@@ -3,6 +3,7 @@ import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
 import {getRatingPercentage} from "../../utils";
 
 const ReviewsItem = ({review}) => {
+  console.info(`<ReviewsItem />: Render`);
   return <li className="reviews__item">
     <div className="reviews__user user">
       <div className="reviews__avatar-wrapper user__avatar-wrapper">

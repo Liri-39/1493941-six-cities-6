@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 
 const ReviewRatingItem = ({item, handleOnChange, rating}) => {
+  console.info(`<ReviewRatingItem />: Render`);
   return <>
     <input
       className="form__rating-input visually-hidden"
@@ -30,4 +31,4 @@ ReviewRatingItem.propTypes = {
   rating: PropTypes.number.isRequired,
 };
 
-export default ReviewRatingItem;
+export default React.memo(ReviewRatingItem);

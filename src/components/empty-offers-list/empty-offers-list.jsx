@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 
 const EmptyOffersList = ({location}) => {
+  console.info(`<EmptyOffersList />: Render`);
   return <div className="cities">
     <div className="cities__places-container cities__places-container--empty container">
       <section className="cities__no-places">

@@ -9,6 +9,7 @@ import {fetchFavoriteList} from "../../store/api-action";
 import LoadingScreen from "../loading-screen/loading-screen";
 
 const FavoritesScreen = ({offers, isFavoritesLoaded, onLoadData}) => {
+  console.info(`<FavoritesScreen />: Render`);
   useEffect(() => {
     if (!isFavoritesLoaded) {
       onLoadData();

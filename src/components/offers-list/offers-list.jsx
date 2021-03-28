@@ -1,5 +1,4 @@
-import React from "react";
-import {ActionCreator} from "../../store/action";
+import React, {useMemo} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import Card from "../card/card";
@@ -8,24 +7,19 @@ import {cityLocationPropTypes} from "../../prop-types/city-location-prop-types";
 import {getSortOffers} from "../../utils";
 import {CardType} from '../../const';
 
-const OffersList = ({offers, activeCard, changeActiveCard}) => {
-  const handleMouseOver = (newCardId) => {
-    if (activeCard !== newCardId) {
-      changeActiveCard(newCardId);
-    }
-  };
+const OffersList = ({offers}) => {
+  console.info(`<OffersList />: Render`);
 
-  const handleMouseOut = () => {
-    changeActiveCard(null);
-  };
+  const locationOffers = useMemo(
+      () => offers,
+      [offers]
+  );
 
   return <div className="cities__places-list places__list tabs__content">
     {
-      offers.map((offer) => <Card
+      locationOffers.map((offer) => <Card
         offer={offer}
         key={offer.id}
-        onCardMouseOver={handleMouseOver}
-        onCardMouseOut={handleMouseOut}
         cardType={CardType.MAIN}
       />)
     }
@@ -35,22 +29,12 @@ const OffersList = ({offers, activeCard, changeActiveCard}) => {
 OffersList.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
   location: cityLocationPropTypes,
-  activeCard: PropTypes.number,
-  changeActiveCard: PropTypes.func,
 };
 
-const mapStateToProps = ({offers, location, activeCard, changeActiveCard, activeSortType}) => ({
+const mapStateToProps = ({offers, location, activeSortType}) => ({
   offers: getSortOffers(activeSortType, offers, location),
   location,
-  activeCard,
-  changeActiveCard,
   activeSortType,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  changeActiveCard(id) {
-    dispatch(ActionCreator.changeActiveCard(id));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OffersList);
+export default connect(mapStateToProps, null)(OffersList);

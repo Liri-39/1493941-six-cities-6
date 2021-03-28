@@ -3,6 +3,7 @@ import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import {getRatingPercentage} from "../../utils";
 
 const FavoritesPlaces = ({offer}) => {
+  console.info(`<FavoritesPlaces />: Render`);
   return <article className="favorites__card place-card">
     <div className="favorites__image-wrapper place-card__image-wrapper">
       <a href="#">

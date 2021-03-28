@@ -7,6 +7,7 @@ import ReviewsItem from "../review-item/reviews-item";
 import {AuthorizationStatus} from "../../const";
 
 const ReviewsList = ({comments, authorizationStatus}) => {
+  console.info(`<ReviewsList />: Render`);
   const reviews = comments;
   const reviewsCount = reviews.length;
   return <section className="property__reviews reviews">

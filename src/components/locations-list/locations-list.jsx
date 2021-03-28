@@ -10,6 +10,7 @@ const LocationsList = ({location, cityList, changeLocation}) => {
     evt.preventDefault();
     changeLocation(city);
   };
+  console.info(`<LocationsList />: Render`);
 
   return <div className="tabs">
     <section className="locations container">

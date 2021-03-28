@@ -84,6 +84,10 @@ const sortByPriceAsc = (pointA, pointB) => pointA.price - pointB.price;
 const sortByPriceDesc = (pointA, pointB) => pointB.price - pointA.price;
 const sortByRate = (pointA, pointB) => pointB.rating - pointA.rating;
 
+export const getOffersByLocation = (offers, location) => {
+  return offers.filter((item) => item.city.name === location.name);
+};
+
 export const getSortOffers = (activeSortType, offers, location) => {
   const offersDefault = offers.filter((item) => item.city.name === location.name);
   const offersCopy = offersDefault.slice();

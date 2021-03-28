@@ -4,6 +4,7 @@ import {offerPropTypes} from "../../prop-types/offer-prop-types";
 import FavoritesPlaces from "../favorites-places/favorites-places";
 
 const FavoritesLocation = ({offers, location}) => {
+  console.info(`<FavoritesLocation />: Render`);
   return <li className="favorites__locations-items">
     <div className="favorites__locations locations locations--current">
       <div className="locations__item">

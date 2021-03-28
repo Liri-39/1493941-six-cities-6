@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import PropTypes from "prop-types";
 
 const Header = ({authInfo}) => {
+  console.info(`<Header />: Render`);
   return <header className="header">
     <div className="container">
       <div className="header__wrapper">

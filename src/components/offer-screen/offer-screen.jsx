@@ -13,6 +13,7 @@ import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
 import {MapType} from '../../const';
 
 const OfferScreen = (props) => {
+  console.info(`<OfferScreen />: Render`);
   const {id, offer, comments, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded, onLoadData} = props;
   useEffect(() => {
     if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {

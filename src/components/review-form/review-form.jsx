@@ -7,6 +7,7 @@ import ReviewRatingItem from "../review-rating-item/review-rating-item";
 import {ratings} from "../../const";
 
 const ReviewForm = ({offer, onSubmit}) => {
+  console.info(`<ReviewForm />: Render`);
   const [reviews, setComment] = useState({
     comment: ``,
     rating: 0,

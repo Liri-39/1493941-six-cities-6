@@ -5,16 +5,21 @@ import {offerPropTypes} from '../../prop-types/offer-prop-types';
 import {getRatingPercentage} from '../../utils';
 import {CardType} from '../../const';
 import {sendFavoriteStatus} from "../../store/api-action";
+import {connect} from "react-redux";
+import {ActionCreator} from "../../store/action";
 
-const Card = ({cardType, offer, onCardMouseOver, onCardMouseOut}) => {
+const Card = ({cardType, offer, activeCard, changeActiveCard}) => {
   const cardMouseOver = useCallback(() => {
-    onCardMouseOver(offer.id);
-  }, [offer.id, onCardMouseOver]);
+    if (activeCard !== offer.id) {
+      changeActiveCard(offer.id);
+    }
+  }, [changeActiveCard, activeCard, offer.id]);
 
   const cardMouseOut = useCallback(() => {
-    onCardMouseOut();
-  }, [onCardMouseOut]);
+    changeActiveCard(null);
+  }, [changeActiveCard]);
 
+  console.info(`<Card />: Render`);
   return <article
     className={`${cardType} place-card`}
     data-offer-id={offer.id}
@@ -65,7 +70,20 @@ Card.propTypes = {
   offer: offerPropTypes.isRequired,
   onCardMouseOver: PropTypes.func,
   onCardMouseOut: PropTypes.func,
-  cardType: PropTypes.string
+  cardType: PropTypes.string,
+  changeActiveCard: PropTypes.func,
+  activeCard: PropTypes.any
 };
 
-export default Card;
+const mapStateToProps = ({activeCard, changeActiveCard}) => ({
+  activeCard,
+  changeActiveCard
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  changeActiveCard(id) {
+    dispatch(ActionCreator.changeActiveCard(id));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

@@ -10,6 +10,7 @@ const ATTRIBUTION = `&copy; <a href="https://www.openstreetmap.org/copyright">Op
 const DEFAULT_ZOOM = 12;
 
 const Map = ({offer, offers, nearPlaces, location, activeCard, mapType}) => {
+  console.info(`<Map />: Render`);
   const mapRef = useRef();
   const iconsLayer = useRef();
 

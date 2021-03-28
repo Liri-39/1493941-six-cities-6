@@ -8,14 +8,14 @@ import LocationsList from "../locations-list/locations-list";
 import EmptyOffersList from "../empty-offers-list/empty-offers-list";
 import Map from '../map/map';
 import Sorter from "../sorter/sorter";
-import {ActionCreator} from "../../store/action";
-import {getSortOffers} from "../../utils";
+import {getOffersByLocation} from "../../utils";
 import LoadingScreen from '../loading-screen/loading-screen';
 import {fetchOfferList} from "../../store/api-action";
 import {MapType} from '../../const';
 
 const MainScreen = (props) => {
-  const {offers, location, activeSortType, changeSortType, isDataLoaded, onLoadData} = props;
+  console.info(`<MainScreen />: Render`);
+  const {offers, location, isDataLoaded, onLoadData} = props;
   useEffect(() => {
     if (!isDataLoaded) {
       onLoadData();
@@ -28,11 +28,6 @@ const MainScreen = (props) => {
     );
   }
 
-  const handleClick = (newActiveSortType) => {
-    if (activeSortType !== newActiveSortType) {
-      changeSortType(newActiveSortType);
-    }
-  };
   return <div className="page page--gray page--main">
     <Header/>
     <main className={`page__main page__main--index ${offers.length === 0 ? `page__main--index-empty` : ``}`}>
@@ -44,7 +39,7 @@ const MainScreen = (props) => {
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offers.length} place{offers.length > 0 && `s`} to stay in {location.name}</b>
-            <Sorter onSortTypeSelect={handleClick}/>
+            <Sorter />
             <OffersList />
           </section>
           <div className="cities__right-section">
@@ -61,25 +56,18 @@ const MainScreen = (props) => {
 MainScreen.propTypes = {
   offers: PropTypes.arrayOf(offerPropTypes).isRequired,
   location: PropTypes.object,
-  activeSortType: PropTypes.any,
   changeLocation: PropTypes.func,
-  changeSortType: PropTypes.func,
   isDataLoaded: PropTypes.bool.isRequired,
   onLoadData: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({offers, location, activeSortType, changeSortType, isDataLoaded}) => ({
-  activeSortType,
-  offers: getSortOffers(activeSortType, offers, location),
+const mapStateToProps = ({offers, location, isDataLoaded}) => ({
+  offers: getOffersByLocation(offers, location),
   location,
-  changeSortType,
   isDataLoaded
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeSortType(sortType) {
-    dispatch(ActionCreator.changeSortType(sortType));
-  },
   onLoadData() {
     dispatch(fetchOfferList());
   },

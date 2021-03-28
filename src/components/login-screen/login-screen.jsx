@@ -7,6 +7,7 @@ import Header from '../header/header';
 import {ActionCreator} from "../../store/action";
 
 const LoginScreen = ({onSubmit}) => {
+  console.info(`<LoginScreen />: Render`);
   const loginRef = useRef();
   const passwordRef = useRef();
 
