@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from "react-redux";
-import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import {useParams} from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
 import Header from "../header/header";
 import NearPlaces from "../near-places/near-places";
 import ReviewsList from "../reviews-list/reviews-list";
@@ -9,17 +8,25 @@ import Map from "../map/map";
 import {getRatingPercentage} from '../../utils';
 import {fetchOffer, fetchNearOffers, fetchComments} from "../../store/api-action";
 import LoadingScreen from "../loading-screen/loading-screen";
-import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
 import {MapType} from '../../const';
+import {NameSpace} from "../../store/reducer";
+import {getLastComments} from "../../store/data/offer-data/selector";
 
-const OfferScreen = (props) => {
+const OfferScreen = () => {
   console.info(`<OfferScreen />: Render`);
-  const {id, offer, comments, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded, onLoadData} = props;
+  const {offer, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded} = useSelector((state) => state[NameSpace.OFFER]);
+  const {id} = useParams();
+  const comments = useSelector(getLastComments);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {
-      onLoadData(id);
+      dispatch(fetchOffer(id));
+      dispatch(fetchNearOffers(id));
+      dispatch(fetchComments(id));
     }
-  }, [id, isOfferLoaded, isCommentsLoaded, onLoadData, isNearPlacesLoaded]);
+  }, [id, isOfferLoaded, isCommentsLoaded, isNearPlacesLoaded, dispatch]);
 
   if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {
     return (
@@ -114,38 +121,4 @@ const OfferScreen = (props) => {
   </div>;
 };
 
-OfferScreen.propTypes = {
-  id: PropTypes.string,
-  offer: offerPropTypes,
-  comments: PropTypes.arrayOf(reviewsPropTypes),
-  nearPlaces: PropTypes.arrayOf(offerPropTypes),
-  isOfferLoaded: PropTypes.any,
-  isCommentsLoaded: PropTypes.any,
-  isNearPlacesLoaded: PropTypes.any,
-  onLoadData: PropTypes.func,
-  cardType: PropTypes.string
-};
-
-ReviewsList.propTypes = {
-  comments: PropTypes.arrayOf(reviewsPropTypes),
-};
-
-const mapStateToProps = ({offer, comments, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded}, {match}) => ({
-  offer,
-  comments,
-  nearPlaces,
-  isNearPlacesLoaded,
-  isOfferLoaded,
-  isCommentsLoaded,
-  id: match.params.id,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLoadData(id) {
-    dispatch(fetchOffer(id));
-    dispatch(fetchNearOffers(id));
-    dispatch(fetchComments(id));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OfferScreen);
+export default OfferScreen;

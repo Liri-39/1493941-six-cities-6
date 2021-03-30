@@ -66,12 +66,12 @@ const Map = ({offer, offers, nearPlaces, location, activeCard, mapType}) => {
 
 Map.propTypes = mapPropTypes;
 
-const mapStateToProps = ({offer, offers, nearPlaces, location, activeCard}) => ({
-  offer,
-  offers: offers.filter((item) => item.city.name === location.name),
-  nearPlaces,
-  location,
-  activeCard,
+const mapStateToProps = ({OFFER, MAIN}) => ({
+  offer: OFFER.offer,
+  offers: MAIN.offers.filter((item) => item.city.name === MAIN.location.name),
+  nearPlaces: OFFER.nearPlaces,
+  location: MAIN.location,
+  activeCard: MAIN.activeCard,
 });
 
 export default connect(mapStateToProps, null)(Map);

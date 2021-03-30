@@ -68,8 +68,8 @@ ReviewForm.propTypes = {
   onSubmit: PropTypes.func
 };
 
-const mapStateToProps = ({offer}) => ({
-  offer,
+const mapStateToProps = ({OFFER}) => ({
+  offer: OFFER.offer,
 });
 
 const mapDispatchToProps = (dispatch) => ({

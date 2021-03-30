@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from "prop-types";
-import {ActionCreator} from '../../store/action';
+import * as ActionCreator from "../../store/action";
 import {cityLocationPropTypes} from '../../prop-types/city-location-prop-types';
 
 const LocationsList = ({location, cityList, changeLocation}) => {
@@ -36,9 +36,9 @@ LocationsList.propTypes = {
   changeLocation: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({location, cityList}) => ({
-  location,
-  cityList
+const mapStateToProps = ({MAIN}) => ({
+  location: MAIN.location,
+  cityList: MAIN.cityList
 });
 
 const mapDispatchToProps = (dispatch) => ({

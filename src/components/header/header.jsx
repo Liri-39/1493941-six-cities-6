@@ -35,8 +35,8 @@ Header.propTypes = {
   authInfo: PropTypes.object
 };
 
-const mapStateToProps = ({authInfo}) => ({
-  authInfo,
+const mapStateToProps = ({USER}) => ({
+  authInfo: USER.authInfo,
 });
 
 export default connect(mapStateToProps, null)(Header);

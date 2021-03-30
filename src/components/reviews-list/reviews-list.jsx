@@ -24,8 +24,8 @@ ReviewsList.propTypes = {
   authorizationStatus: PropTypes.string
 };
 
-const mapStateToProps = ({authorizationStatus}) => ({
-  authorizationStatus
+const mapStateToProps = ({USER}) => ({
+  authorizationStatus: USER.authorizationStatus
 });
 
 export default connect(mapStateToProps)(ReviewsList);

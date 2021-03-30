@@ -1,5 +1,3 @@
-import {sortType} from "./const";
-
 export const adaptToClient = (offer) => {
   const adaptedOffer = Object.assign(
       {},
@@ -80,30 +78,9 @@ const ONE_STAR_PERCENT = 20;
 
 export const getRatingPercentage = (rating) => `${Math.round(rating) * ONE_STAR_PERCENT}%`;
 
-const sortByPriceAsc = (pointA, pointB) => pointA.price - pointB.price;
-const sortByPriceDesc = (pointA, pointB) => pointB.price - pointA.price;
-const sortByRate = (pointA, pointB) => pointB.rating - pointA.rating;
-
-export const getOffersByLocation = (offers, location) => {
-  return offers.filter((item) => item.city.name === location.name);
-};
-
-export const getSortOffers = (activeSortType, offers, location) => {
-  const offersDefault = offers.filter((item) => item.city.name === location.name);
-  const offersCopy = offersDefault.slice();
-  switch (activeSortType) {
-    case sortType.popular:
-      return offersCopy;
-    case sortType.priceByAsc:
-      return offersCopy.sort(sortByPriceAsc);
-    case sortType.priceByDesc:
-      return offersCopy.sort(sortByPriceDesc);
-    case sortType.byRating:
-      return offersCopy.sort(sortByRate);
-    default:
-      return offersDefault;
-  }
-};
+export const sortByPriceAsc = (pointA, pointB) => pointA.price - pointB.price;
+export const sortByPriceDesc = (pointA, pointB) => pointB.price - pointA.price;
+export const sortByRate = (pointA, pointB) => pointB.rating - pointA.rating;
 
 export const adaptAuthDataToClient = (data) => {
   const adaptedAuthInfo = Object.assign(

@@ -1,19 +1,29 @@
 import React, {useMemo} from "react";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
+import {useDispatch, useSelector} from 'react-redux';
 import Card from "../card/card";
-import {offerPropTypes} from "../../prop-types/offer-prop-types";
-import {cityLocationPropTypes} from "../../prop-types/city-location-prop-types";
-import {getSortOffers} from "../../utils";
 import {CardType} from '../../const';
+import {getActiveOffers} from "../../store/data/main-data/selector";
+import {changeActiveCard} from "../../store/action";
 
-const OffersList = ({offers}) => {
+const OffersList = () => {
   console.info(`<OffersList />: Render`);
+  const dispatch = useDispatch();
+  const offers = useSelector(getActiveOffers);
 
   const locationOffers = useMemo(
       () => offers,
       [offers]
   );
+
+  const mouseOutHandler = () => {
+    dispatch(changeActiveCard(null));
+  };
+
+  const mouseOverHandler = (activeCard, id) => {
+    if (activeCard !== id) {
+      dispatch(changeActiveCard(id));
+    }
+  };
 
   return <div className="cities__places-list places__list tabs__content">
     {
@@ -21,20 +31,11 @@ const OffersList = ({offers}) => {
         offer={offer}
         key={offer.id}
         cardType={CardType.MAIN}
+        mouseOutHandler={mouseOutHandler}
+        mouseOverHandler={mouseOverHandler}
       />)
     }
   </div>;
 };
 
-OffersList.propTypes = {
-  offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-  location: cityLocationPropTypes,
-};
-
-const mapStateToProps = ({offers, location, activeSortType}) => ({
-  offers: getSortOffers(activeSortType, offers, location),
-  location,
-  activeSortType,
-});
-
-export default connect(mapStateToProps, null)(OffersList);
+export default OffersList;

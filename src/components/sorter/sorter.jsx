@@ -2,14 +2,14 @@ import React, {useState} from "react";
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {sortType} from "../../const";
-import {ActionCreator} from "../../store/action";
+import {changeSortType} from "../../store/action";
 
-const Sorter = ({activeSortType, changeSortType}) => {
+const Sorter = ({activeSortType, onSorterClick}) => {
   const [isSorterOpen, setIsSorterOpen] = useState(false);
 
   const handleClick = (evt, newActiveSortType) => {
     evt.preventDefault();
-    changeSortType(newActiveSortType);
+    onSorterClick(newActiveSortType);
   };
 
   const handleHoverForm = (evt) => {
@@ -44,16 +44,16 @@ const Sorter = ({activeSortType, changeSortType}) => {
 Sorter.propTypes = {
   sortType: PropTypes.any,
   activeSortType: PropTypes.any,
-  changeSortType: PropTypes.func
+  onSorterClick: PropTypes.func
 };
 
-const mapStateToProps = ({activeSortType}) => ({
-  activeSortType
+const mapStateToProps = ({MAIN}) => ({
+  activeSortType: MAIN.activeSortType
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeSortType(newActiveSortType) {
-    dispatch(ActionCreator.changeSortType(newActiveSortType));
+  onSorterClick(newActiveSortType) {
+    dispatch(changeSortType(newActiveSortType));
   },
 });
 

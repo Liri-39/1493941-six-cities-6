@@ -1,23 +1,29 @@
 import React, {useCallback} from "react";
+import {useSelector, useDispatch} from 'react-redux';
 import PropTypes from "prop-types";
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from "react-router-dom";
 import {offerPropTypes} from '../../prop-types/offer-prop-types';
 import {getRatingPercentage} from '../../utils';
-import {CardType} from '../../const';
+import {CardType, AppRoute, AuthorizationStatus} from '../../const';
 import {sendFavoriteStatus} from "../../store/api-action";
-import {connect} from "react-redux";
-import {ActionCreator} from "../../store/action";
 
-const Card = ({cardType, offer, activeCard, changeActiveCard}) => {
+const Card = ({cardType, offer, mouseOutHandler, mouseOverHandler}) => {
+  const {authorizationStatus} = useSelector((state) => state.USER);
+  const {activeCard} = useSelector((state) => state.MAIN);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
   const cardMouseOver = useCallback(() => {
-    if (activeCard !== offer.id) {
-      changeActiveCard(offer.id);
-    }
-  }, [changeActiveCard, activeCard, offer.id]);
+    mouseOverHandler(activeCard, offer.id);
+  }, [mouseOverHandler, activeCard, offer.id]);
 
   const cardMouseOut = useCallback(() => {
-    changeActiveCard(null);
-  }, [changeActiveCard]);
+    mouseOutHandler(null);
+  }, [mouseOutHandler]);
+
+  const handleClickFavorite = () => {
+    dispatch(sendFavoriteStatus(offer.id, !offer.isFavorite));
+  };
 
   console.info(`<Card />: Render`);
   return <article
@@ -44,7 +50,11 @@ const Card = ({cardType, offer, activeCard, changeActiveCard}) => {
         <button
           className={`place-card__bookmark-button button ${offer.isFavorite ? `place-card__bookmark-button--active button` : ``}`}
           type="button"
-          onClick={() => sendFavoriteStatus(offer.id, offer)}
+          onClick={() =>
+            authorizationStatus === AuthorizationStatus.AUTH ?
+              handleClickFavorite :
+              history.push(`${AppRoute.LOGIN_SCREEN}`)
+          }
         >
           <svg className={`place-card__bookmark-icon`} width="18" height="19">
             <use xlinkHref="#icon-bookmark"/>
@@ -68,22 +78,9 @@ const Card = ({cardType, offer, activeCard, changeActiveCard}) => {
 
 Card.propTypes = {
   offer: offerPropTypes.isRequired,
-  onCardMouseOver: PropTypes.func,
-  onCardMouseOut: PropTypes.func,
   cardType: PropTypes.string,
-  changeActiveCard: PropTypes.func,
-  activeCard: PropTypes.any
+  mouseOutHandler: PropTypes.func,
+  mouseOverHandler: PropTypes.func
 };
 
-const mapStateToProps = ({activeCard, changeActiveCard}) => ({
-  activeCard,
-  changeActiveCard
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  changeActiveCard(id) {
-    dispatch(ActionCreator.changeActiveCard(id));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Card);
+export default Card;

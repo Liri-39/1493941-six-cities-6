@@ -21,8 +21,8 @@ EmptyOffersList.propTypes = {
   location: PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({location}) => ({
-  location
+const mapStateToProps = ({MAIN}) => ({
+  location: MAIN.location
 });
 
 

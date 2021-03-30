@@ -1,26 +1,29 @@
 import React, {useEffect} from "react";
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {offerPropTypes} from '../../prop-types/offer-prop-types';
+import {useSelector, useDispatch} from 'react-redux';
+import {getActiveOffers} from '../../store/data/main-data/selector';
 import OffersList from '../offers-list/offers-list';
 import Header from "../header/header";
 import LocationsList from "../locations-list/locations-list";
 import EmptyOffersList from "../empty-offers-list/empty-offers-list";
 import Map from '../map/map';
 import Sorter from "../sorter/sorter";
-import {getOffersByLocation} from "../../utils";
 import LoadingScreen from '../loading-screen/loading-screen';
 import {fetchOfferList} from "../../store/api-action";
 import {MapType} from '../../const';
 
-const MainScreen = (props) => {
+const MainScreen = () => {
   console.info(`<MainScreen />: Render`);
-  const {offers, location, isDataLoaded, onLoadData} = props;
+
+  const {isDataLoaded, location} = useSelector((state) => state.MAIN);
+  const offers = useSelector(getActiveOffers);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (!isDataLoaded) {
-      onLoadData();
+      dispatch(fetchOfferList());
     }
-  }, [isDataLoaded, onLoadData]);
+  }, [isDataLoaded, dispatch]);
 
   if (!isDataLoaded) {
     return (
@@ -53,24 +56,4 @@ const MainScreen = (props) => {
   </div>;
 };
 
-MainScreen.propTypes = {
-  offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-  location: PropTypes.object,
-  changeLocation: PropTypes.func,
-  isDataLoaded: PropTypes.bool.isRequired,
-  onLoadData: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = ({offers, location, isDataLoaded}) => ({
-  offers: getOffersByLocation(offers, location),
-  location,
-  isDataLoaded
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLoadData() {
-    dispatch(fetchOfferList());
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
+export default MainScreen;
