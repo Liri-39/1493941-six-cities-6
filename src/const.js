@@ -94,3 +94,5 @@ export const ratings = [
   {rating: 2, title: `badly`},
   {rating: 1, title: `terribly`},
 ];
+
+export const ERROR_TIMEOUT = 10000;

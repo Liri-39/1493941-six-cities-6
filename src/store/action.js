@@ -1,3 +1,4 @@
+import {createAction} from '@reduxjs/toolkit';
 import {adaptToClient, adaptCommentsToClient, adaptAuthDataToClient} from "../utils";
 
 export const ActionType = {
@@ -12,55 +13,85 @@ export const ActionType = {
   LOAD_OFFER: `data/loadOffer`,
   SET_AUTH_INFO: `user/setAuthInfo`,
   REDIRECT_TO_ROUTE: `data/redirectToRoute`,
-  CHANGE_FAVORITE_STATUS: `data/changeFavoriteStatus`,
-  ADD_COMMENT: `data/addComment`
+  ADD_TO_FAVORITE: `data/addToFavorite`,
+  DELETE_FROM_FAVORITE: `data/deleteFromFavorite`,
+  ADD_COMMENT: `data/addComment`,
+  UPDATE_OFFERS: `data/updateOffers`,
+  SET_IS_ERROR: `data/setIsError`
 };
 
-export const changeLocation = (location) => ({
-  type: ActionType.CHANGE_LOCATION,
-  payload: location,
+export const changeLocation = createAction(ActionType.CHANGE_LOCATION, (location) => {
+  return {
+    payload: location,
+  };
 });
-export const changeActiveCard = (id) => ({
-  type: ActionType.CHANGE_ACTIVE_CARD,
-  payload: id,
+export const changeActiveCard = createAction(ActionType.CHANGE_ACTIVE_CARD, (id) => {
+  return {
+    payload: id,
+  };
 });
-export const changeSortType = (sortType) => ({
-  type: ActionType.CHANGE_SORT_TYPE,
-  payload: sortType,
+export const changeSortType = createAction(ActionType.CHANGE_SORT_TYPE, (sortType) => {
+  return {
+    payload: sortType,
+  };
 });
-export const loadOffers = (offers) => ({
-  type: ActionType.LOAD_OFFERS,
-  payload: offers.map((offer) => adaptToClient(offer)),
+export const loadOffers = createAction(ActionType.LOAD_OFFERS, (offers) => {
+  return {
+    payload: offers.map((offer) => adaptToClient(offer)),
+  };
 });
-export const requireAuthorization = (status) => ({
-  type: ActionType.REQUIRED_AUTHORIZATION,
-  payload: status,
+export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => {
+  return {
+    payload: status,
+  };
 });
-export const setAuthInfo = (info) => ({
-  type: ActionType.SET_AUTH_INFO,
-  payload: adaptAuthDataToClient(info),
+export const setAuthInfo = createAction(ActionType.SET_AUTH_INFO, (info) => {
+  return {
+    payload: adaptAuthDataToClient(info),
+  };
 });
-export const loadComments = (comments) => ({
-  type: ActionType.LOAD_COMMENTS,
-  payload: comments.map((comment) => adaptCommentsToClient(comment)),
+export const loadComments = createAction(ActionType.LOAD_COMMENTS, (comments) => {
+  return {
+    payload: comments.map((comment) => adaptCommentsToClient(comment)),
+  };
 });
-export const loadNearOffers = (offers) => ({
-  type: ActionType.LOAD_NEAR_OFFERS,
-  payload: offers.map((offer) => adaptToClient(offer)),
+export const loadNearOffers = createAction(ActionType.LOAD_NEAR_OFFERS, (offers) => {
+  return {
+    payload: offers.map((offer) => adaptToClient(offer)),
+  };
 });
-export const loadFavoriteList = (offers) => ({
-  type: ActionType.LOAD_FAVORITES_LIST,
-  payload: offers.map((offer) => adaptToClient(offer)),
+export const loadFavoriteList = createAction(ActionType.LOAD_FAVORITES_LIST, (offers) => {
+  return {
+    payload: offers.map((offer) => adaptToClient(offer)),
+  };
 });
-export const loadOffer = (offer) => ({
-  type: ActionType.LOAD_OFFER,
-  payload: adaptToClient(offer),
+export const loadOffer = createAction(ActionType.LOAD_OFFER, (offer) => {
+  return {
+    payload: adaptToClient(offer),
+  };
 });
-export const redirectToRoute = (url) => ({
-  type: ActionType.REDIRECT_TO_ROUTE,
-  payload: url,
+export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => {
+  return {
+    payload: url,
+  };
 });
-export const changeFavoriteStatus = (offer) => ({
-  type: ActionType.CHANGE_FAVORITE_STATUS,
-  payload: offer,
+export const addToFavorite = createAction(ActionType.ADD_TO_FAVORITE, (offer) => {
+  return {
+    payload: adaptToClient(offer),
+  };
+});
+export const deleteFromFavorite = createAction(ActionType.DELETE_FROM_FAVORITE, (offer) => {
+  return {
+    payload: offer.id,
+  };
+});
+export const updateOffers = createAction(ActionType.UPDATE_OFFERS, (offer) => {
+  return {
+    payload: adaptToClient(offer),
+  };
+});
+export const setIsError = createAction(ActionType.SET_IS_ERROR, (isError) => {
+  return {
+    payload: isError,
+  };
 });

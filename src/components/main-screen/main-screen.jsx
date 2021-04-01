@@ -1,6 +1,6 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {getActiveOffers} from '../../store/data/main-data/selector';
+import {getActiveOffers} from '../../store/data/main-data/selectors';
 import OffersList from '../offers-list/offers-list';
 import Header from "../header/header";
 import LocationsList from "../locations-list/locations-list";
@@ -13,6 +13,7 @@ import {MapType} from '../../const';
 
 const MainScreen = () => {
   console.info(`<MainScreen />: Render`);
+  const [activeCard, setActiveCard] = useState();
 
   const {isDataLoaded, location} = useSelector((state) => state.MAIN);
   const offers = useSelector(getActiveOffers);
@@ -43,11 +44,11 @@ const MainScreen = () => {
             <h2 className="visually-hidden">Places</h2>
             <b className="places__found">{offers.length} place{offers.length > 0 && `s`} to stay in {location.name}</b>
             <Sorter />
-            <OffersList />
+            <OffersList onChangeActiveCard={setActiveCard}/>
           </section>
           <div className="cities__right-section">
             <section className="cities__map map">
-              <Map mapType={MapType.MAIN}/>
+              <Map mapType={MapType.MAIN} activeCard={activeCard}/>
             </section>
           </div>
         </div>

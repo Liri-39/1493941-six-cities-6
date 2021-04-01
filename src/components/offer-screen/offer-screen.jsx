@@ -6,18 +6,15 @@ import NearPlaces from "../near-places/near-places";
 import ReviewsList from "../reviews-list/reviews-list";
 import Map from "../map/map";
 import {getRatingPercentage} from '../../utils';
-import {fetchOffer, fetchNearOffers, fetchComments} from "../../store/api-action";
+import {fetchOffer, fetchNearOffers, fetchComments, sendFavoriteStatus} from "../../store/api-action";
 import LoadingScreen from "../loading-screen/loading-screen";
 import {MapType} from '../../const';
 import {NameSpace} from "../../store/reducer";
-import {getLastComments} from "../../store/data/offer-data/selector";
 
 const OfferScreen = () => {
   console.info(`<OfferScreen />: Render`);
   const {offer, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded} = useSelector((state) => state[NameSpace.OFFER]);
   const {id} = useParams();
-  const comments = useSelector(getLastComments);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -55,7 +52,13 @@ const OfferScreen = () => {
               <h1 className="property__name">
                 {offer.title}
               </h1>
-              <button className="property__bookmark-button button" type="button">
+              <button
+                className= {`property__bookmark-button button ${offer.isFavorite ? `property__bookmark-button--active` : ``}`}
+                type="button"
+                onClick={() => {
+                  dispatch(sendFavoriteStatus(offer.id, !offer.isFavorite));
+                }}
+              >
                 <svg className="property__bookmark-icon" width="31" height="33">
                   <use xlinkHref="#icon-bookmark"/>
                 </svg>
@@ -96,7 +99,7 @@ const OfferScreen = () => {
             <div className="property__host">
               <h2 className="property__host-title">Meet the host</h2>
               <div className="property__host-user user">
-                <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
+                <div className={`property__avatar-wrapper ${offer.host.isPro ? `property__avatar-wrapper--pro` : ``} user__avatar-wrapper`}>
                   <img className="property__avatar user__avatar" src={offer.host.avatarUrl} width="74" height="74" alt="Host avatar"/>
                 </div>
                 <span className="property__user-name">{offer.host.name}</span>
@@ -107,7 +110,7 @@ const OfferScreen = () => {
                 </p>
               </div>
             </div>
-            <ReviewsList comments={comments}/>
+            <ReviewsList/>
           </div>
         </div>
         <section className="property__map map">

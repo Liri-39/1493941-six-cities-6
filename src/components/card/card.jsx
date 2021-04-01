@@ -1,36 +1,20 @@
-import React, {useCallback} from "react";
-import {useSelector, useDispatch} from 'react-redux';
+import React from "react";
 import PropTypes from "prop-types";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {offerPropTypes} from '../../prop-types/offer-prop-types';
 import {getRatingPercentage} from '../../utils';
-import {CardType, AppRoute, AuthorizationStatus} from '../../const';
-import {sendFavoriteStatus} from "../../store/api-action";
+import {CardType} from '../../const';
+import {useCardEventsHandler} from '../../hooks/use-card-events-handlers';
 
-const Card = ({cardType, offer, mouseOutHandler, mouseOverHandler}) => {
-  const {authorizationStatus} = useSelector((state) => state.USER);
-  const {activeCard} = useSelector((state) => state.MAIN);
-  const history = useHistory();
-  const dispatch = useDispatch();
-
-  const cardMouseOver = useCallback(() => {
-    mouseOverHandler(activeCard, offer.id);
-  }, [mouseOverHandler, activeCard, offer.id]);
-
-  const cardMouseOut = useCallback(() => {
-    mouseOutHandler(null);
-  }, [mouseOutHandler]);
-
-  const handleClickFavorite = () => {
-    dispatch(sendFavoriteStatus(offer.id, !offer.isFavorite));
-  };
+const Card = ({cardType, offer}) => {
+  const [favoriteStatus, cardMouseOver, cardMouseOut, handleClickFavorite] = useCardEventsHandler(offer);
 
   console.info(`<Card />: Render`);
   return <article
     className={`${cardType} place-card`}
     data-offer-id={offer.id}
-    onMouseOver={cardType === CardType.MAIN ? cardMouseOver : () => {}}
-    onMouseOut={cardType === CardType.MAIN ? cardMouseOut : () => {}}>
+    onMouseEnter={cardType === CardType.MAIN ? cardMouseOver : () => {}}
+    onMouseLeave={cardType === CardType.MAIN ? cardMouseOut : () => {}}>
     {offer.isPremium &&
     <div className="place-card__mark">
       <span>Premium</span>
@@ -48,13 +32,9 @@ const Card = ({cardType, offer, mouseOutHandler, mouseOverHandler}) => {
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
         <button
-          className={`place-card__bookmark-button button ${offer.isFavorite ? `place-card__bookmark-button--active button` : ``}`}
+          className={`place-card__bookmark-button button ${favoriteStatus ? `place-card__bookmark-button--active` : ``}`}
           type="button"
-          onClick={() =>
-            authorizationStatus === AuthorizationStatus.AUTH ?
-              handleClickFavorite :
-              history.push(`${AppRoute.LOGIN_SCREEN}`)
-          }
+          onClick={() => handleClickFavorite()}
         >
           <svg className={`place-card__bookmark-icon`} width="18" height="19">
             <use xlinkHref="#icon-bookmark"/>
@@ -78,9 +58,7 @@ const Card = ({cardType, offer, mouseOutHandler, mouseOverHandler}) => {
 
 Card.propTypes = {
   offer: offerPropTypes.isRequired,
-  cardType: PropTypes.string,
-  mouseOutHandler: PropTypes.func,
-  mouseOverHandler: PropTypes.func
+  cardType: PropTypes.string
 };
 
 export default Card;

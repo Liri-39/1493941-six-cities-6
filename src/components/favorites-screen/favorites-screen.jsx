@@ -5,26 +5,28 @@ import Footer from "../footer/footer";
 import FavoritesLocation from "../favorites-locations/favorites-locations";
 import {fetchFavoriteList} from "../../store/api-action";
 import LoadingScreen from "../loading-screen/loading-screen";
+import withError from "../../hocs/with-error/with-error";
+import {getFavoritesLocation} from "../../store/data/favorite-data/selectors";
 
 const FavoritesScreen = () => {
   console.info(`<FavoritesScreen />: Render`);
-  const offers = useSelector((state) => state.FAVORITE.favorites);
+  const favoritesLocation = useSelector(getFavoritesLocation);
   const {isFavoritesLoaded} = useSelector((state) => state.FAVORITE);
-
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!isFavoritesLoaded) {
       dispatch(fetchFavoriteList());
     }
-  }, [isFavoritesLoaded]);
+  }, [isFavoritesLoaded, dispatch]);
 
   if (!isFavoritesLoaded) {
     return (
       <LoadingScreen />
     );
   }
-  const favoritesLocation = [...new Set(offers.map((offer) => (offer.city.name)))];
-  const offersExist = Boolean(offers.length);
+
+  const offersExist = Boolean(favoritesLocation.length);
   return <div className="page">
     {<Header/>}
 
@@ -34,8 +36,7 @@ const FavoritesScreen = () => {
           offersExist && <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              {favoritesLocation.map((city) => <FavoritesLocation
-                offers={offers.filter((offer) => (offer.city.name === city))} location={city} key={city}/>)}
+              {favoritesLocation.map((city) => <FavoritesLocation location={city} key={city}/>)}
             </ul>
           </section>
         }
@@ -55,4 +56,5 @@ const FavoritesScreen = () => {
   </div>;
 };
 
-export default FavoritesScreen;
+export {FavoritesScreen};
+export default withError(FavoritesScreen);

@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {ActionType} from '../../action';
+import {changeSortType, changeLocation, loadOffers, changeActiveCard, updateOffers, setIsError} from '../../action';
 import {CityList, sortType} from "../../../const";
 
 const initialState = {
@@ -13,19 +13,31 @@ const initialState = {
 };
 
 const mainData = createReducer(initialState, (builder) => {
-  builder.addCase(ActionType.LOAD_OFFERS, (state, action) => {
-    state.offers = action.payload;
-    state.isDataLoaded = true;
-  });
-  builder.addCase(ActionType.CHANGE_LOCATION, (state, action) => {
-    state.location = action.payload;
-  });
-  builder.addCase(ActionType.CHANGE_ACTIVE_CARD, (state, action) => {
-    state.activeCard = action.payload;
-  });
-  builder.addCase(ActionType.CHANGE_SORT_TYPE, (state, action) => {
-    state.activeSortType = action.payload;
-  });
+  builder
+    .addCase(loadOffers, (state, action) => {
+      state.offers = action.payload;
+      state.isDataLoaded = true;
+    })
+    .addCase(changeLocation, (state, action) => {
+      state.location = action.payload;
+    })
+    .addCase(changeActiveCard, (state, action) => {
+      state.activeCard = action.payload;
+    })
+    .addCase(changeSortType, (state, action) => {
+      state.activeSortType = action.payload;
+    })
+    .addCase(updateOffers, (state, action) => {
+      const index = state.offers.findIndex((offer) => offer.id === action.payload.id);
+      state.offers = [
+        ...state.offers.slice(0, index),
+        action.payload,
+        ...state.offers.slice(index + 1)
+      ];
+    })
+    .addCase(setIsError, (state, action) => {
+      state.isError = action.payload;
+    });
 });
 
 export {mainData};

@@ -8,10 +8,13 @@ const initialState = {
 };
 
 const user = createReducer(initialState, (builder) => {
-  builder.addCase(ActionType.REQUIRED_AUTHORIZATION, (state, action) => {
-    state.authorizationStatus = action.payload;
-    state.authInfo = action.payload;
-  });
+  builder
+    .addCase(ActionType.REQUIRED_AUTHORIZATION, (state, action) => {
+      state.authorizationStatus = action.payload;
+    })
+    .addCase(ActionType.SET_AUTH_INFO, (state, action) => {
+      state.authInfo = action.payload;
+    });
 });
 
 export {user};

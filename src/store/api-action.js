@@ -1,35 +1,61 @@
-import {loadOffers, loadComments, loadNearOffers, loadFavoriteList, loadOffer, redirectToRoute, requireAuthorization, setAuthInfo} from "./action";
+import {
+  addToFavorite,
+  loadOffers,
+  loadComments,
+  loadNearOffers,
+  loadFavoriteList,
+  loadOffer,
+  redirectToRoute,
+  requireAuthorization,
+  setAuthInfo,
+  deleteFromFavorite,
+  updateOffers,
+  setIsError
+} from "./action";
 import {AuthorizationStatus, APIRoute} from "../const";
 
 export const fetchOfferList = () => (dispatch, _getState, api) => (
   api
     .get(APIRoute.OFFERS)
     .then(({data}) => dispatch(loadOffers(data)))
+    .catch(() => {
+      dispatch(setIsError(true));
+    })
 );
 
 export const fetchComments = (id) => (dispatch, _getState, api) => (
   api
     .get(`${APIRoute.COMMENTS}/${id}`)
     .then(({data}) => dispatch(loadComments(data)))
+    .catch(() => {
+      dispatch(setIsError(true));
+    })
 );
 
 export const fetchNearOffers = (id) => (dispatch, _getState, api) => (
   api
     .get(`${APIRoute.OFFERS}/${id}/nearby`)
     .then(({data}) => dispatch(loadNearOffers(data)))
+    .catch(() => {
+      dispatch(setIsError(true));
+    })
 );
 
 export const fetchFavoriteList = () => (dispatch, _getState, api) => (
   api
     .get(APIRoute.FAVORITES)
     .then(({data}) => dispatch(loadFavoriteList(data)))
+    .catch(() => dispatch(setIsError(true)))
 );
 
 export const fetchOffer = (id) => (dispatch, _getState, api) => (
   api
     .get(`${APIRoute.OFFERS}/${id}`)
     .then(({data}) => dispatch(loadOffer(data)))
-    .catch(() => dispatch(redirectToRoute(`/404`)))
+    .catch(() => {
+      dispatch(setIsError(true));
+      dispatch(redirectToRoute(`/404`));
+    })
 );
 
 export const checkAuth = () => (dispatch, _getState, api) => (
@@ -39,7 +65,7 @@ export const checkAuth = () => (dispatch, _getState, api) => (
       dispatch(requireAuthorization(AuthorizationStatus.AUTH));
       dispatch(setAuthInfo(data));
     })
-    .catch(() => {})
+    .catch(() => dispatch(setIsError(true)))
 );
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) => (
@@ -49,25 +75,22 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
       dispatch(requireAuthorization(AuthorizationStatus.AUTH));
       dispatch(setAuthInfo(res.data));
     })
-);
-
-export const logout = () => (dispatch, _getState, api) => (
-  api
-    .get(APIRoute.LOGOUT)
-    .then(() => dispatch(requireAuthorization(AuthorizationStatus.NO_AUTH)))
+    .catch(() => dispatch(setIsError(true)))
 );
 
 export const sendComment = (id, {comment, rating}) => (dispatch, _getState, api) => {
   api
     .post(`${APIRoute.COMMENTS}/${id}`, {comment, rating})
-    .then((res) => dispatch(loadComments(res.data)));
+    .then((res) => dispatch(loadComments(res.data)))
+    .catch(() => dispatch(setIsError(true)));
 };
 
-export const sendFavoriteStatus = (id, status) => (dispatch, _getState, api) => (
+export const sendFavoriteStatus = (id, status) => (dispatch, _getState, api) => {
   api
     .post(`${APIRoute.FAVORITES}/${id}/${Number(status)}`)
-    .then(({res}) => {
-      dispatch(loadFavoriteList(res.data));
-      dispatch(loadOffers((res.data)));
-    })
-);
+    .then(({data}) => {
+      dispatch(status ? addToFavorite(data) : deleteFromFavorite(data));
+      dispatch(updateOffers(data));
+    });
+};
+
