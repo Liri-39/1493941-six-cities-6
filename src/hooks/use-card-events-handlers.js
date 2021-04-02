@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useCallback} from "react";
 import {changeActiveCard} from "../store/action";
 import {useDispatch, useSelector} from "react-redux";
 import {sendFavoriteStatus} from "../store/api-action";
@@ -12,22 +12,21 @@ export const useCardEventsHandler = (offer) => {
   const [favoriteStatus, setFavorite] = useState(offer.isFavorite);
   const {authorizationStatus} = useSelector((state) => state.USER);
   const {activeCard} = useSelector((state) => state.MAIN);
-  const id = offer.id;
 
-  const cardMouseOver = (evt) => {
+  const cardMouseOver = useCallback((evt) => {
     evt.preventDefault();
-    if (activeCard !== id) {
-      dispatch(changeActiveCard(id));
+    if (activeCard !== offer.id) {
+      dispatch(changeActiveCard(offer.id));
     }
-  };
+  }, [activeCard, offer.id, dispatch]);
 
-  const cardMouseOut = () => {
+  const cardMouseOut = useCallback(() => {
     dispatch(changeActiveCard(null));
-  };
+  }, [dispatch]);
 
   const handleClickFavorite = () => {
     if (authorizationStatus === AuthorizationStatus.AUTH) {
-      dispatch(sendFavoriteStatus(id, !favoriteStatus));
+      dispatch(sendFavoriteStatus(offer.id, !favoriteStatus));
       setFavorite(!favoriteStatus);
     } else {
       history.push(`${AppRoute.LOGIN_SCREEN}`);

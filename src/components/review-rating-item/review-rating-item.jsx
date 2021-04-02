@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from "prop-types";
 
 const ReviewRatingItem = ({item, handleOnChange, rating}) => {
-  console.info(`<ReviewRatingItem />: Render`);
   return <>
     <input
       className="form__rating-input visually-hidden"

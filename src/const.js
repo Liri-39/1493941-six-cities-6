@@ -96,3 +96,8 @@ export const ratings = [
 ];
 
 export const ERROR_TIMEOUT = 10000;
+
+export const CommentLength = {
+  MAX: 300,
+  MIN: 50
+};

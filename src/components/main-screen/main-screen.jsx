@@ -8,14 +8,14 @@ import EmptyOffersList from "../empty-offers-list/empty-offers-list";
 import Map from '../map/map';
 import Sorter from "../sorter/sorter";
 import LoadingScreen from '../loading-screen/loading-screen';
+import withError from "../../hocs/with-error/with-error";
 import {fetchOfferList} from "../../store/api-action";
 import {MapType} from '../../const';
 
 const MainScreen = () => {
-  console.info(`<MainScreen />: Render`);
   const [activeCard, setActiveCard] = useState();
 
-  const {isDataLoaded, location} = useSelector((state) => state.MAIN);
+  const {isDataLoaded, location, isError} = useSelector((state) => state.MAIN);
   const offers = useSelector(getActiveOffers);
 
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const MainScreen = () => {
     }
   }, [isDataLoaded, dispatch]);
 
-  if (!isDataLoaded) {
+  if (!isDataLoaded && !isError) {
     return (
       <LoadingScreen />
     );
@@ -57,4 +57,5 @@ const MainScreen = () => {
   </div>;
 };
 
-export default MainScreen;
+export {MainScreen};
+export default withError(MainScreen);

@@ -7,17 +7,19 @@ export const ActionType = {
   CHANGE_SORT_TYPE: `data/changeSortType`,
   LOAD_OFFERS: `data/loadOffers`,
   REQUIRED_AUTHORIZATION: `user/requiredAuthorization`,
-  LOAD_COMMENTS: `data/loadComments`,
-  LOAD_NEAR_OFFERS: `data/loadNearOffers`,
+  LOAD_COMMENTS: `offer/loadComments`,
+  LOAD_NEAR_OFFERS: `offer/loadNearOffers`,
   LOAD_FAVORITES_LIST: `data/loadFavoriteList`,
-  LOAD_OFFER: `data/loadOffer`,
+  LOAD_OFFER: `offer/loadOffer`,
   SET_AUTH_INFO: `user/setAuthInfo`,
   REDIRECT_TO_ROUTE: `data/redirectToRoute`,
   ADD_TO_FAVORITE: `data/addToFavorite`,
   DELETE_FROM_FAVORITE: `data/deleteFromFavorite`,
-  ADD_COMMENT: `data/addComment`,
+  ADD_COMMENT: `offer/addComment`,
   UPDATE_OFFERS: `data/updateOffers`,
-  SET_IS_ERROR: `data/setIsError`
+  SET_IS_ERROR: `data/setIsError`,
+  SET_IS_DISABLE: `offer/setIsDisable`,
+  CHANGE_LOAD_STATUS: `offer/changeLoadStatus`
 };
 
 export const changeLocation = createAction(ActionType.CHANGE_LOCATION, (location) => {
@@ -70,6 +72,11 @@ export const loadOffer = createAction(ActionType.LOAD_OFFER, (offer) => {
     payload: adaptToClient(offer),
   };
 });
+export const changeLoadStatus = createAction(ActionType.CHANGE_LOAD_STATUS, (status) => {
+  return {
+    payload: status,
+  };
+});
 export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => {
   return {
     payload: url,
@@ -93,5 +100,10 @@ export const updateOffers = createAction(ActionType.UPDATE_OFFERS, (offer) => {
 export const setIsError = createAction(ActionType.SET_IS_ERROR, (isError) => {
   return {
     payload: isError,
+  };
+});
+export const setIsDisable = createAction(ActionType.SET_IS_DISABLE, (isDisable) => {
+  return {
+    payload: isDisable,
   };
 });

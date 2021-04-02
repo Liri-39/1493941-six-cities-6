@@ -1,16 +1,15 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import PropTypes from "prop-types";
+import {useDispatch, useSelector} from 'react-redux';
 import * as ActionCreator from "../../store/action";
-import {cityLocationPropTypes} from '../../prop-types/city-location-prop-types';
 
-const LocationsList = ({location, cityList, changeLocation}) => {
+const LocationsList = () => {
+  const dispatch = useDispatch();
+  const {location, cityList} = useSelector((state) => state.MAIN);
 
   const onCityClick = (evt, city) => {
     evt.preventDefault();
-    changeLocation(city);
+    dispatch(ActionCreator.changeLocation(city));
   };
-  console.info(`<LocationsList />: Render`);
 
   return <div className="tabs">
     <section className="locations container">
@@ -30,21 +29,4 @@ const LocationsList = ({location, cityList, changeLocation}) => {
   </div>;
 };
 
-LocationsList.propTypes = {
-  location: cityLocationPropTypes,
-  cityList: PropTypes.object.isRequired,
-  changeLocation: PropTypes.func.isRequired
-};
-
-const mapStateToProps = ({MAIN}) => ({
-  location: MAIN.location,
-  cityList: MAIN.cityList
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  changeLocation(location) {
-    dispatch(ActionCreator.changeLocation(location));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LocationsList);
+export default LocationsList;

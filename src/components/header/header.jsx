@@ -1,10 +1,10 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {Link} from "react-router-dom";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
 
-const Header = ({authInfo}) => {
-  console.info(`<Header />: Render`);
+const Header = () => {
+  const {authInfo} = useSelector((state) => state.USER);
+
   return <header className="header">
     <div className="container">
       <div className="header__wrapper">
@@ -31,12 +31,4 @@ const Header = ({authInfo}) => {
   </header>;
 };
 
-Header.propTypes = {
-  authInfo: PropTypes.object
-};
-
-const mapStateToProps = ({USER}) => ({
-  authInfo: USER.authInfo,
-});
-
-export default connect(mapStateToProps, null)(Header);
+export default Header;

@@ -9,7 +9,6 @@ import {useCardEventsHandler} from '../../hooks/use-card-events-handlers';
 const Card = ({cardType, offer}) => {
   const [favoriteStatus, cardMouseOver, cardMouseOut, handleClickFavorite] = useCardEventsHandler(offer);
 
-  console.info(`<Card />: Render`);
   return <article
     className={`${cardType} place-card`}
     data-offer-id={offer.id}

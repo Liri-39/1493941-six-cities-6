@@ -8,13 +8,16 @@ const initialState = {
   isOfferLoaded: false,
   isCommentsLoaded: false,
   isNearPlacesLoaded: false,
+  isDisabled: false,
 };
 
 const offerData = createReducer(initialState, (builder) => {
   builder
     .addCase(ActionType.LOAD_OFFER, (state, action) => {
       state.offer = action.payload;
-      state.isOfferLoaded = true;
+    })
+    .addCase(ActionType.CHANGE_LOAD_STATUS, (state, action) => {
+      state.isOfferLoaded = action.payload;
     })
     .addCase(ActionType.LOAD_COMMENTS, (state, action) => {
       state.comments = action.payload;
@@ -26,8 +29,9 @@ const offerData = createReducer(initialState, (builder) => {
     })
     .addCase(ActionType.ADD_COMMENT, (state, action) => {
       state.comments = [...state.comments, action.payload];
-      state.onLoadCommentFormData = true;
-      state.commentFormError = ``;
+    })
+    .addCase(ActionType.SET_IS_DISABLE, (state, action) => {
+      state.isDisabled = action.payload;
     });
 });
 

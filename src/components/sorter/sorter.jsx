@@ -1,15 +1,16 @@
 import React, {useState} from "react";
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {sortType} from "../../const";
+import {useDispatch, useSelector} from 'react-redux';
 import {changeSortType} from "../../store/action";
 
-const Sorter = ({activeSortType, onSorterClick}) => {
+const Sorter = () => {
   const [isSorterOpen, setIsSorterOpen] = useState(false);
+  const {activeSortType, sortType} = useSelector((state) => state.MAIN);
+
+  const dispatch = useDispatch();
 
   const handleClick = (evt, newActiveSortType) => {
     evt.preventDefault();
-    onSorterClick(newActiveSortType);
+    dispatch(changeSortType(newActiveSortType));
   };
 
   const handleHoverForm = (evt) => {
@@ -17,7 +18,6 @@ const Sorter = ({activeSortType, onSorterClick}) => {
     setIsSorterOpen(!isSorterOpen);
   };
 
-  console.info(`<Sorter />: Render`);
   return <form className="places__sorting" action="#" method="get" onClick={handleHoverForm}>
     <span className="places__sorting-caption">Sort by </span>
     <span className="places__sorting-type" tabIndex="0">
@@ -41,20 +41,4 @@ const Sorter = ({activeSortType, onSorterClick}) => {
   </form>;
 };
 
-Sorter.propTypes = {
-  sortType: PropTypes.any,
-  activeSortType: PropTypes.any,
-  onSorterClick: PropTypes.func
-};
-
-const mapStateToProps = ({MAIN}) => ({
-  activeSortType: MAIN.activeSortType
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onSorterClick(newActiveSortType) {
-    dispatch(changeSortType(newActiveSortType));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sorter);
+export default Sorter;

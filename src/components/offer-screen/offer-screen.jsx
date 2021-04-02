@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import Header from "../header/header";
@@ -8,26 +8,32 @@ import Map from "../map/map";
 import {getRatingPercentage} from '../../utils';
 import {fetchOffer, fetchNearOffers, fetchComments, sendFavoriteStatus} from "../../store/api-action";
 import LoadingScreen from "../loading-screen/loading-screen";
+import withError from "../../hocs/with-error/with-error";
 import {MapType} from '../../const';
 import {NameSpace} from "../../store/reducer";
 
 const OfferScreen = () => {
-  console.info(`<OfferScreen />: Render`);
-  const {offer, nearPlaces, isNearPlacesLoaded, isOfferLoaded, isCommentsLoaded} = useSelector((state) => state[NameSpace.OFFER]);
   const {id} = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {
-      dispatch(fetchOffer(id));
-      dispatch(fetchNearOffers(id));
-      dispatch(fetchComments(id));
-    }
-  }, [id, isOfferLoaded, isCommentsLoaded, isNearPlacesLoaded, dispatch]);
+    dispatch(fetchOffer(id));
+    dispatch(fetchNearOffers(id));
+    dispatch(fetchComments(id));
+  }, [id, dispatch]);
 
-  if (!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) {
+  const {
+    offer,
+    isNearPlacesLoaded,
+    isOfferLoaded,
+    isCommentsLoaded,
+  } = useSelector((state) => state[NameSpace.OFFER]);
+
+  const [favoriteStatus, setFavoriteStatus] = useState(isOfferLoaded ? offer.isFavorite : false);
+
+  if ((!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) || (isOfferLoaded && Number(offer.id) !== Number(id))) {
     return (
-      <LoadingScreen />
+      <LoadingScreen/>
     );
   }
 
@@ -45,18 +51,21 @@ const OfferScreen = () => {
         </div>
         <div className="property__container container">
           <div className="property__wrapper">
+            {offer.isPremium &&
             <div className="property__mark">
-              <span>{offer.isPremium}</span>
+              <span>Premium</span>
             </div>
+            }
             <div className="property__name-wrapper">
               <h1 className="property__name">
                 {offer.title}
               </h1>
               <button
-                className= {`property__bookmark-button button ${offer.isFavorite ? `property__bookmark-button--active` : ``}`}
+                className={`property__bookmark-button button ${favoriteStatus ? `property__bookmark-button--active` : ``}`}
                 type="button"
                 onClick={() => {
                   dispatch(sendFavoriteStatus(offer.id, !offer.isFavorite));
+                  setFavoriteStatus(!offer.isFavorite);
                 }}
               >
                 <svg className="property__bookmark-icon" width="31" height="33">
@@ -99,10 +108,16 @@ const OfferScreen = () => {
             <div className="property__host">
               <h2 className="property__host-title">Meet the host</h2>
               <div className="property__host-user user">
-                <div className={`property__avatar-wrapper ${offer.host.isPro ? `property__avatar-wrapper--pro` : ``} user__avatar-wrapper`}>
+                <div
+                  className={`property__avatar-wrapper ${offer.host.isPro ? `property__avatar-wrapper--pro` : ``} user__avatar-wrapper`}>
                   <img className="property__avatar user__avatar" src={offer.host.avatarUrl} width="74" height="74" alt="Host avatar"/>
                 </div>
                 <span className="property__user-name">{offer.host.name}</span>
+                {offer.host.isPro &&
+                <span className="property__user-status">
+                    Pro
+                </span>
+                }
               </div>
               <div className="property__description">
                 <p className="property__text">
@@ -118,10 +133,11 @@ const OfferScreen = () => {
         </section>
       </section>
       <div className="container">
-        <NearPlaces offers={nearPlaces}/>
+        <NearPlaces/>
       </div>
     </main>
   </div>;
 };
 
-export default OfferScreen;
+export {OfferScreen};
+export default withError(OfferScreen);

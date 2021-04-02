@@ -6,11 +6,10 @@ import FavoritesLocation from "../favorites-locations/favorites-locations";
 import {fetchFavoriteList} from "../../store/api-action";
 import LoadingScreen from "../loading-screen/loading-screen";
 import withError from "../../hocs/with-error/with-error";
-import {getFavoritesLocation} from "../../store/data/favorite-data/selectors";
+import {getFavoritesLocations} from "../../store/data/favorite-data/selectors";
 
 const FavoritesScreen = () => {
-  console.info(`<FavoritesScreen />: Render`);
-  const favoritesLocation = useSelector(getFavoritesLocation);
+  const favoritesLocation = useSelector(getFavoritesLocations);
   const {isFavoritesLoaded} = useSelector((state) => state.FAVORITE);
   const dispatch = useDispatch();
 

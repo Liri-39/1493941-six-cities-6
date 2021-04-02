@@ -2,8 +2,8 @@ import React from 'react';
 import {reviewsPropTypes} from "../../prop-types/reviews-prop-types";
 import {getRatingPercentage} from "../../utils";
 
-const ReviewsItem = ({review}) => {
-  console.info(`<ReviewsItem />: Render`);
+const ReviewItem = ({review}) => {
+
   return <li className="reviews__item">
     <div className="reviews__user user">
       <div className="reviews__avatar-wrapper user__avatar-wrapper">
@@ -21,12 +21,14 @@ const ReviewsItem = ({review}) => {
       <p className="reviews__text">
         {review.comment}
       </p>
-      <time className="reviews__time" dateTime={review.date}>{review.date}</time>
+      <time className="reviews__time" dateTime={review.date}>
+        {new Date(review.date).toLocaleDateString(`en-US`, {year: `numeric`, month: `long`})}
+      </time>
     </div>
   </li>;
 };
 
-ReviewsItem.propTypes = {
+ReviewItem.propTypes = {
   review: reviewsPropTypes
 };
-export default ReviewsItem;
+export default ReviewItem;

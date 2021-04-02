@@ -3,9 +3,9 @@ import {useHistory} from 'react-router-dom';
 import {useDispatch} from "react-redux";
 import {login} from "../../store/api-action";
 import Header from '../header/header';
+import withError from "../../hocs/with-error/with-error";
 
 const LoginScreen = () => {
-  console.info(`<LoginScreen />: Render`);
   const loginRef = useRef();
   const passwordRef = useRef();
 
@@ -73,4 +73,5 @@ const LoginScreen = () => {
   </div>;
 };
 
-export default LoginScreen;
+export {LoginScreen};
+export default withError(LoginScreen);

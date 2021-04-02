@@ -1,15 +1,14 @@
 import React from "react";
-import {Link} from "react-router-dom";
 
 const Error = () => {
 
-  return <div className="favorites__status-wrapper">
-    <b className="favorites__status">Oops... </b>
-    <Link className="footer__logo-link" to="/">
-      <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33"/>
-      <p className="favorites__status-description">let&apos;s start over?</p>
-    </Link>
-  </div>;
+  return <header className="header">
+    <section className="cities">
+      <div className="property__wrapper">
+        <p className="cities__status">Oops...Try again</p>
+      </div>
+    </section>
+  </header>;
 };
 
 export default Error;

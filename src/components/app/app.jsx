@@ -10,7 +10,6 @@ import OfferScreen from "../offer-screen/offer-screen";
 import {AppRoute} from "../../const";
 
 const App = () => {
-  console.info(`<App />: Render`);
   return (
     <BrowserRouter history={browserHistory}>
       <Switch>

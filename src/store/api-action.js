@@ -10,7 +10,8 @@ import {
   setAuthInfo,
   deleteFromFavorite,
   updateOffers,
-  setIsError
+  setIsError,
+  setIsDisable, changeLoadStatus,
 } from "./action";
 import {AuthorizationStatus, APIRoute} from "../const";
 
@@ -48,15 +49,18 @@ export const fetchFavoriteList = () => (dispatch, _getState, api) => (
     .catch(() => dispatch(setIsError(true)))
 );
 
-export const fetchOffer = (id) => (dispatch, _getState, api) => (
+export const fetchOffer = (id) => (dispatch, _getState, api) => {
   api
     .get(`${APIRoute.OFFERS}/${id}`)
-    .then(({data}) => dispatch(loadOffer(data)))
+    .then(({data}) => {
+      dispatch(loadOffer(data));
+      dispatch(changeLoadStatus(true));
+    })
     .catch(() => {
       dispatch(setIsError(true));
       dispatch(redirectToRoute(`/404`));
-    })
-);
+    });
+};
 
 export const checkAuth = () => (dispatch, _getState, api) => (
   api
@@ -65,7 +69,6 @@ export const checkAuth = () => (dispatch, _getState, api) => (
       dispatch(requireAuthorization(AuthorizationStatus.AUTH));
       dispatch(setAuthInfo(data));
     })
-    .catch(() => dispatch(setIsError(true)))
 );
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) => (
@@ -79,10 +82,17 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
 );
 
 export const sendComment = (id, {comment, rating}) => (dispatch, _getState, api) => {
+  dispatch(setIsDisable(true));
   api
     .post(`${APIRoute.COMMENTS}/${id}`, {comment, rating})
-    .then((res) => dispatch(loadComments(res.data)))
-    .catch(() => dispatch(setIsError(true)));
+    .then((res) => {
+      dispatch(loadComments(res.data));
+      dispatch(setIsDisable(false));
+    })
+    .catch(() => {
+      dispatch(setIsError(true));
+      dispatch(setIsDisable(true));
+    });
 };
 
 export const sendFavoriteStatus = (id, status) => (dispatch, _getState, api) => {

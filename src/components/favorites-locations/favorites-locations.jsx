@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from "prop-types";
 import FavoritesPlaces from "../favorites-places/favorites-places";
 import {useSelector} from "react-redux";
@@ -6,9 +6,7 @@ import {getFavoritesOffers} from "../../store/data/favorite-data/selectors";
 
 const FavoritesLocation = ({location}) => {
   const offers = useSelector(getFavoritesOffers);
-  const offersByLocation = offers.slice().filter((item) => item.city.name === location);
-
-  console.info(`<FavoritesLocation />: Render`);
+  const offersByLocation = useMemo(() => offers.slice().filter((item) => item.city.name === location), [location, offers]);
 
   return <li className="favorites__locations-items">
     <div className="favorites__locations locations locations--current">

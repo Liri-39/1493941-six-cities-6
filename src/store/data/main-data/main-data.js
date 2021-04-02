@@ -10,6 +10,7 @@ const initialState = {
   activeCard: null,
   activeSortType: sortType.popular,
   sortType,
+  isError: false,
 };
 
 const mainData = createReducer(initialState, (builder) => {
