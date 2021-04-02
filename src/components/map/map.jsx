@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useMemo} from 'react';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import leaflet from 'leaflet';
 import {mapPropTypes} from "../../prop-types/map-prop-types";
 import {MapType} from '../../const';
@@ -9,10 +9,12 @@ import "../../../node_modules/leaflet/dist/leaflet.css";
 const ATTRIBUTION = `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`;
 const DEFAULT_ZOOM = 12;
 
-const Map = ({offer, offers, nearPlaces, location, activeCard, mapType}) => {
-  console.info(`<Map />: Render`);
+const Map = ({mapType}) => {
   const mapRef = useRef();
   const iconsLayer = useRef();
+
+  const {offer, nearPlaces} = useSelector((state) => state.OFFER);
+  const {offers, location, activeCard} = useSelector((state) => state.MAIN);
 
   const activeCity = mapType === MapType.MAIN ? location : offer.city;
   const activeMarker = mapType === MapType.MAIN ? activeCard : offer.id;
@@ -66,12 +68,4 @@ const Map = ({offer, offers, nearPlaces, location, activeCard, mapType}) => {
 
 Map.propTypes = mapPropTypes;
 
-const mapStateToProps = ({OFFER, MAIN}) => ({
-  offer: OFFER.offer,
-  offers: MAIN.offers.filter((item) => item.city.name === MAIN.location.name),
-  nearPlaces: OFFER.nearPlaces,
-  location: MAIN.location,
-  activeCard: MAIN.activeCard,
-});
-
-export default connect(mapStateToProps, null)(Map);
+export default Map;
