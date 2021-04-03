@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import Header from "../header/header";
 import NearPlaces from "../near-places/near-places";
@@ -9,12 +9,14 @@ import {getRatingPercentage} from '../../utils';
 import {fetchOffer, fetchNearOffers, fetchComments, sendFavoriteStatus} from "../../store/api-action";
 import LoadingScreen from "../loading-screen/loading-screen";
 import withError from "../../hocs/with-error/with-error";
-import {MapType} from '../../const';
+import {AppRoute, AuthorizationStatus, MapType} from '../../const';
 import {NameSpace} from "../../store/reducer";
 
 const OfferScreen = () => {
   const {id} = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const {authorizationStatus} = useSelector((state) => state.USER);
 
   useEffect(() => {
     dispatch(fetchOffer(id));
@@ -64,8 +66,12 @@ const OfferScreen = () => {
                 className={`property__bookmark-button button ${favoriteStatus ? `property__bookmark-button--active` : ``}`}
                 type="button"
                 onClick={() => {
-                  dispatch(sendFavoriteStatus(offer.id, !offer.isFavorite));
-                  setFavoriteStatus(!offer.isFavorite);
+                  if (authorizationStatus === AuthorizationStatus.AUTH) {
+                    dispatch(sendFavoriteStatus(offer.id, !offer.isFavorite));
+                    setFavoriteStatus(!offer.isFavorite);
+                  } else {
+                    history.push(`${AppRoute.LOGIN_SCREEN}`);
+                  }
                 }}
               >
                 <svg className="property__bookmark-icon" width="31" height="33">
