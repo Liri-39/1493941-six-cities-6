@@ -1,14 +1,31 @@
-import React from 'react';
-import PropTypes from "prop-types";
-import {connect} from 'react-redux';
-import {offerPropTypes} from "../../prop-types/offer-prop-types";
+import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import Header from '../header/header';
 import Footer from "../footer/footer";
 import FavoritesLocation from "../favorites-locations/favorites-locations";
+import {fetchFavoriteList} from "../../store/api-action";
+import LoadingScreen from "../loading-screen/loading-screen";
+import withError from "../../hocs/with-error/with-error";
+import {getFavoritesLocations} from "../../store/data/favorite-data/selectors";
 
-const FavoritesScreen = ({offers}) => {
-  const favoritesLocation = [...new Set(offers.map((offer) => (offer.city.name)))];
-  const offersExist = Boolean(offers.length);
+const FavoritesScreen = () => {
+  const favoritesLocation = useSelector(getFavoritesLocations);
+  const {isFavoritesLoaded} = useSelector((state) => state.FAVORITE);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!isFavoritesLoaded) {
+      dispatch(fetchFavoriteList());
+    }
+  }, [isFavoritesLoaded, dispatch]);
+
+  if (!isFavoritesLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
+  const offersExist = Boolean(favoritesLocation.length);
   return <div className="page">
     {<Header/>}
 
@@ -18,8 +35,7 @@ const FavoritesScreen = ({offers}) => {
           offersExist && <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              {favoritesLocation.map((city) => <FavoritesLocation
-                offers={offers.filter((offer) => (offer.city.name === city))} location={city} key={city}/>)}
+              {favoritesLocation.map((city) => <FavoritesLocation location={city} key={city}/>)}
             </ul>
           </section>
         }
@@ -39,12 +55,5 @@ const FavoritesScreen = ({offers}) => {
   </div>;
 };
 
-const mapStateToProps = ({offers}) => ({
-  offers: offers.filter((item) => item.isFavorite)
-});
-
-FavoritesScreen.propTypes = {
-  offers: PropTypes.arrayOf(offerPropTypes).isRequired,
-};
-
-export default connect(mapStateToProps, null)(FavoritesScreen);
+export {FavoritesScreen};
+export default withError(FavoritesScreen);

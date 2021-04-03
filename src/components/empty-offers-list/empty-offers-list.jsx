@@ -1,8 +1,9 @@
 import React from "react";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
+import {useSelector} from "react-redux";
 
-const EmptyOffersList = ({location}) => {
+const EmptyOffersList = () => {
+  const location = useSelector((state) => state.MAIN.location);
+
   return <div className="cities">
     <div className="cities__places-container cities__places-container--empty container">
       <section className="cities__no-places">
@@ -15,14 +16,4 @@ const EmptyOffersList = ({location}) => {
     </div>
   </div>;
 };
-
-EmptyOffersList.propTypes = {
-  location: PropTypes.object.isRequired
-};
-
-const mapStateToProps = ({location}) => ({
-  location
-});
-
-
-export default connect(mapStateToProps, null)(EmptyOffersList);
+export default EmptyOffersList;
