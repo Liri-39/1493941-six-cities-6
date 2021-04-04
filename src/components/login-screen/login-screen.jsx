@@ -1,17 +1,23 @@
 import React, {useRef} from 'react';
 import {useHistory} from 'react-router-dom';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../store/api-action";
 import Header from '../header/header';
 import withError from "../../hocs/with-error/with-error";
+import {AuthorizationStatus} from '../../const';
+import {getAuthorizationStatus} from "../../store/user/selectors";
 
 const LoginScreen = () => {
   const loginRef = useRef();
   const passwordRef = useRef();
 
   const history = useHistory();
-
   const dispatch = useDispatch();
+
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  if (authorizationStatus === AuthorizationStatus.AUTH) {
+    history.push(`/`);
+  }
 
   const handleSubmit = (evt) => {
     evt.preventDefault();

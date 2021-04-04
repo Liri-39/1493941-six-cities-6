@@ -26,14 +26,12 @@ const OfferScreen = () => {
 
   const {
     offer,
-    isNearPlacesLoaded,
     isOfferLoaded,
-    isCommentsLoaded,
   } = useSelector((state) => state[NameSpace.OFFER]);
 
   const [favoriteStatus, setFavoriteStatus] = useState(isOfferLoaded ? offer.isFavorite : false);
 
-  if ((!isOfferLoaded && !isCommentsLoaded && !isNearPlacesLoaded) || (isOfferLoaded && Number(offer.id) !== Number(id))) {
+  if ((offer === null) || (isOfferLoaded && Number(offer.id) !== Number(id))) {
     return (
       <LoadingScreen/>
     );
