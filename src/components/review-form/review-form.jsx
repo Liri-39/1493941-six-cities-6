@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import {sendComment} from "../../store/api-action";
 import ReviewRatingItem from "../review-rating-item/review-rating-item";
 import {ratings, CommentLength} from "../../const";
+import {setIsError} from "../../store/action";
 
 const ReviewForm = () => {
 
@@ -18,10 +19,24 @@ const ReviewForm = () => {
   const {isError} = useSelector((state) => state.MAIN);
   const {comment, rating} = reviews;
 
+  useEffect(() => {
+    if (isError) {
+      setTimeout(() => dispatch(setIsError(false)), 5000);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (!isError && !isDisabled) {
+      setComment(() => ({
+        comment: ``,
+        rating: 0
+      }));
+    }
+  }, [isError, isDisabled]);
+
   const sendForm = (evt) => {
     evt.preventDefault();
     dispatch(sendComment(id, {comment, rating}));
-    setComment({comment: ``, rating: 0});
   };
 
   const handleCommentRatingChange = (evt) => {
