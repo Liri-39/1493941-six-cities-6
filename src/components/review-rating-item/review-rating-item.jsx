@@ -25,7 +25,10 @@ const ReviewRatingItem = ({item, handleOnChange, rating}) => {
 };
 
 ReviewRatingItem.propTypes = {
-  item: PropTypes.any.isRequired,
+  item: PropTypes.shape({
+    rating: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+  }).isRequired,
   handleOnChange: PropTypes.func.isRequired,
   rating: PropTypes.number.isRequired,
 };

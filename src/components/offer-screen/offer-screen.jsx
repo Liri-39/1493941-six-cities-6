@@ -11,6 +11,7 @@ import LoadingScreen from "../loading-screen/loading-screen";
 import withError from "../../hocs/with-error/with-error";
 import {AppRoute, AuthorizationStatus, MapType} from '../../const';
 import {NameSpace} from "../../store/reducer";
+import {MAX_IMG_COUNT} from "../../const";
 
 const OfferScreen = () => {
   const {id} = useParams();
@@ -43,7 +44,7 @@ const OfferScreen = () => {
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
-            {offer.images.slice(0, 6).map((image, i) => (
+            {offer.images.slice(0, MAX_IMG_COUNT).map((image, i) => (
               <div className="property__image-wrapper" key={`${offer.id}-${i}-photo`}>
                 <img className="property__image" src={image} alt="Photo studio"/>
               </div>))}
