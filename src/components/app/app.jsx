@@ -25,6 +25,9 @@ const App = () => {
         <Route path={AppRoute.NOT_FOUND} exact>
           <NotFoundScreen />
         </Route>
+        <Route>
+          <NotFoundScreen />
+        </Route>
       </Switch>
     </BrowserRouter>
   );
