@@ -4,7 +4,6 @@ import {useSelector, useDispatch} from "react-redux";
 import {sendComment} from "../../store/api-action";
 import ReviewRatingItem from "../review-rating-item/review-rating-item";
 import {ratings, CommentLength} from "../../const";
-import {setIsError} from "../../store/action";
 
 const ReviewForm = () => {
 
@@ -18,12 +17,6 @@ const ReviewForm = () => {
   const {isDisabled} = useSelector((state) => state.OFFER);
   const {isError} = useSelector((state) => state.MAIN);
   const {comment, rating} = reviews;
-
-  useEffect(() => {
-    if (isError) {
-      setTimeout(() => dispatch(setIsError(false)), 5000);
-    }
-  }, [isError]);
 
   useEffect(() => {
     if (!isError && !isDisabled) {
@@ -62,7 +55,7 @@ const ReviewForm = () => {
           handleOnChange={handleCommentRatingChange}
           rating={reviews.rating}
           key={`${item.rating}-stars`}
-          disabled={isDisabled}
+          isDisabled={isDisabled}
         />
       )}
     </div>

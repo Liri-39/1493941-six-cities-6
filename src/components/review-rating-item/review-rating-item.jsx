@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 
-const ReviewRatingItem = ({item, handleOnChange, rating}) => {
+const ReviewRatingItem = ({item, handleOnChange, rating, isDisabled}) => {
   return <>
     <input
       className="form__rating-input visually-hidden"
@@ -11,6 +11,7 @@ const ReviewRatingItem = ({item, handleOnChange, rating}) => {
       type="radio"
       onChange={handleOnChange}
       checked={item.rating === rating}
+      disabled={isDisabled}
     />
     <label
       htmlFor={`${item.rating}-stars`}
@@ -31,6 +32,7 @@ ReviewRatingItem.propTypes = {
   }).isRequired,
   handleOnChange: PropTypes.func.isRequired,
   rating: PropTypes.number.isRequired,
+  isDisabled: PropTypes.bool.isRequired
 };
 
 export default React.memo(ReviewRatingItem);

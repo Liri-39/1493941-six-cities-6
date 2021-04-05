@@ -88,10 +88,11 @@ export const sendComment = (id, {comment, rating}) => (dispatch, _getState, api)
     .then((res) => {
       dispatch(loadComments(res.data));
       dispatch(setIsDisable(false));
+      dispatch(setIsError(false));
     })
     .catch(() => {
       dispatch(setIsError(true));
-      dispatch(setIsDisable(true));
+      dispatch(setIsDisable(false));
     });
 };
 
