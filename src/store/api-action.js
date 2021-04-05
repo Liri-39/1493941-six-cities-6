@@ -65,10 +65,9 @@ export const fetchOffer = (id) => (dispatch, _getState, api) => {
 export const checkAuth = () => (dispatch, _getState, api) => (
   api
     .get(APIRoute.LOGIN)
-    .then(({data}) => {
-      dispatch(requireAuthorization(AuthorizationStatus.AUTH));
-      dispatch(setAuthInfo(data));
-    })
+    .then(({data}) => dispatch(setAuthInfo(data)))
+    .then(() => dispatch(requireAuthorization(AuthorizationStatus.AUTH)))
+    .catch(() => {})
 );
 
 export const login = ({login: email, password}) => (dispatch, _getState, api) => (
@@ -77,6 +76,7 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
     .then((res) => {
       dispatch(requireAuthorization(AuthorizationStatus.AUTH));
       dispatch(setAuthInfo(res.data));
+      dispatch(redirectToRoute(`/`));
     })
     .catch(() => dispatch(setIsError(true)))
 );
