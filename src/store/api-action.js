@@ -100,6 +100,7 @@ export const sendFavoriteStatus = (id, status) => (dispatch, _getState, api) => 
   api
     .post(`${APIRoute.FAVORITES}/${id}/${Number(status)}`)
     .then(({data}) => {
+      dispatch(loadOffer(data));
       dispatch(status ? addToFavorite(data) : deleteFromFavorite(data));
       dispatch(updateOffers(data));
     });

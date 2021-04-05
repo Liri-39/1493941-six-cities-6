@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useHistory, useParams} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import Header from "../header/header";
@@ -12,12 +12,13 @@ import withError from "../../hocs/with-error/with-error";
 import {AppRoute, AuthorizationStatus, MapType} from '../../const';
 import {NameSpace} from "../../store/reducer";
 import {MAX_IMG_COUNT} from "../../const";
+import {getAuthorizationStatus} from "../../store/user/selectors";
 
 const OfferScreen = () => {
   const {id} = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-  const {authorizationStatus} = useSelector((state) => state.USER);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
   useEffect(() => {
     dispatch(fetchOffer(id));
@@ -29,8 +30,6 @@ const OfferScreen = () => {
     offer,
     isOfferLoaded,
   } = useSelector((state) => state[NameSpace.OFFER]);
-
-  const [favoriteStatus, setFavoriteStatus] = useState(isOfferLoaded ? offer.isFavorite : false);
 
   if ((offer === null) || (isOfferLoaded && Number(offer.id) !== Number(id))) {
     return (
@@ -62,12 +61,11 @@ const OfferScreen = () => {
                 {offer.title}
               </h1>
               <button
-                className={`property__bookmark-button button ${favoriteStatus ? `property__bookmark-button--active` : ``}`}
+                className={`property__bookmark-button button ${offer.isFavorite ? `property__bookmark-button--active` : ``}`}
                 type="button"
                 onClick={() => {
                   if (authorizationStatus === AuthorizationStatus.AUTH) {
                     dispatch(sendFavoriteStatus(offer.id, !offer.isFavorite));
-                    setFavoriteStatus(!offer.isFavorite);
                   } else {
                     history.push(`${AppRoute.LOGIN_SCREEN}`);
                   }
